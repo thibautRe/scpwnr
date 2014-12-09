@@ -46,6 +46,11 @@ var openTrack = function(pageUrl) {
         var mp3Adress = '';
         var titleText = '';
         var artistText = '';
+        var albumText = '';
+
+        if (/\/sets\/(.*)/.test(pageUrl)) {
+            albumText = /\/sets\/(.*)/.exec(pageUrl)[1];
+        }
 
         this.thenOpen(pageUrl);
         this.then(function() {
@@ -96,7 +101,14 @@ var openTrack = function(pageUrl) {
 
                 // Download the mp3
                 this.then(function() {
-                    this.download(mp3Adress, musicFolder + '/' + getMp3Name(titleText, artistText)+ '.mp3');
+                    var pathToFile = '';
+                    if (!albumText) {
+                        path = musicFolder + '/' + getMp3Name(titleText, artistText)+ '.mp3'
+                    }
+                    else {
+                        path = musicFolder + '/' + albumText + '/' + getMp3Name(titleText, artistText)+ '.mp3'
+                    }
+                    this.download(mp3Adress, path);
                 })
             });
         });
@@ -173,7 +185,7 @@ var _open = function(url) {
 // openTrack('https://soundcloud.com/firepowerrecs/2-phaseone-touching-the-stars?in=firepowerrecs/sets/phaseone-touching-the-stars');
 // openTrack('https://soundcloud.com/airbattle/runwithme');
 
-_open('https://soundcloud.com/thenoisyfreaks/');
+_open('https://soundcloud.com/stelouse/sets/the-city-ep');
 
 // openUserlist('https://soundcloud.com/brandon-zeier');
 casper.run();
