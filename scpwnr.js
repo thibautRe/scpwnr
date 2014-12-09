@@ -103,22 +103,22 @@ var openTrack = function(pageUrl) {
     });
 };
 
-var openPlaylist = function(playlistUrl) {
-    casper.thenOpen(playlistUrl);
+var openSet = function(setUrl) {
+    casper.thenOpen(setUrl);
     casper.then(function() {
-        var playlistLinks = this.evaluate(function() {
-            var links = [];
+        var setLinks = this.evaluate(function() {
+            var setLinks = [];
             var listNodes = document.querySelectorAll('.listenDetails__trackList .trackItem__trackTitle');
             for (var i = 0; i < listNodes.length; i++) {
-                links.push(listNodes[i].href);
+                setLinks.push(listNodes[i].href);
             }
-            return links;
+            return setLinks;
         });
 
-        console.log('Found ' + playlistLinks.length + ' song(s)');
+        console.log('Found ' + setLinks.length + ' song(s)');
 
-        for (var i in playlistLinks) {
-            openTrack(playlistLinks[i]);
+        for (var i in setLinks) {
+            openTrack(setLinks[i]);
         }
 
     });
@@ -138,7 +138,7 @@ var openUserlist = function(userlistUrl) {
             return linkList;
         });
 
-        console.log('Found ' + linkList.length + ' track(s) or playlist(s)');
+        console.log('Found ' + linkList.length + ' track(s) or set(s)');
 
         for (var i in linkList) {
             _open(linkList[i]);
@@ -146,7 +146,7 @@ var openUserlist = function(userlistUrl) {
     });
 };
 
-// URL can be anything (a playlist, a userlist or a track)
+// URL can be anything (a set, a userlist or a track)
 var _open = function(url) {
     // If it is a userlist
     //  https://soundcloud.com/thenoisyfreaks
@@ -156,11 +156,11 @@ var _open = function(url) {
         openUserlist(url);
     }
 
-    // If it is a playlist
+    // If it is a set
     // https://soundcloud.com/thenoisyfreaks/sets/straight-life-album
     else if (/\/sets\//.test(url) && !/(\?in=).*\/sets\//.test(url)) {
-        casper.log('*** Open playlist', 'info');
-        openPlaylist(url);
+        casper.log('*** Open set', 'info');
+        openSet(url);
     }
 
     // It is a track
@@ -173,7 +173,7 @@ var _open = function(url) {
 // openTrack('https://soundcloud.com/firepowerrecs/2-phaseone-touching-the-stars?in=firepowerrecs/sets/phaseone-touching-the-stars');
 // openTrack('https://soundcloud.com/airbattle/runwithme');
 
-_open('https://soundcloud.com/thenoisyfreaks/the-noisy-freaks-tonight-teaser-out-aug-20th-on-lowtemp');
+_open('https://soundcloud.com/thenoisyfreaks/');
 
 // openUserlist('https://soundcloud.com/brandon-zeier');
 casper.run();
