@@ -109,6 +109,8 @@ var openPlaylist = function(playlistUrl) {
             return links;
         });
 
+        console.log('Found ' + playlistLinks.length + ' song(s)');
+
         for (var i in playlistLinks) {
             openTrack(playlistLinks[i]);
         }
@@ -116,9 +118,46 @@ var openPlaylist = function(playlistUrl) {
     });
 };
 
+var openTrackOrPlaylist = function(url) {
+    if (/\/sets\//.test(url)) {
+        console.log('Open playlist');
+        openPlaylist(url);
+    }
+    else {
+        console.log('Open track ' + url);
+        openTrack(url);
+    }
+};
+
+var openUserlist = function(userlistUrl) {
+    casper.thenOpen(userlistUrl);
+    casper.then(function() {
+        var linkList = this.evaluate(function() {
+            var linkList = [];
+            var listNodes = document.querySelectorAll('.userStreamItem a.soundTitle__title');
+
+            for (var i = 0; i < listNodes.length; i++)  {
+                linkList.push(listNodes[i].href);
+            }
+
+            return linkList;
+        });
+
+        console.log('Found ' + linkList.length + ' track(s) or playlist(s)');
+
+        for (var i in linkList) {
+            openTrackOrPlaylist(linkList[i]);
+        }
+
+
+    });
+};
+
 
 // openTrack('https://soundcloud.com/firepowerrecs/2-phaseone-touching-the-stars?in=firepowerrecs/sets/phaseone-touching-the-stars');
-openTrack('https://soundcloud.com/edm/zes-bliss-edmcom-premiere');
+// openTrack('https://soundcloud.com/airbattle/runwithme');
 
-// openPlaylist('https://soundcloud.com/firepowerrecs/sets/phaseone-touching-the-stars');
+openPlaylist('https://soundcloud.com/thenoisyfreaks/sets/straight-life-album');
+
+// openUserlist('https://soundcloud.com/brandon-zeier');
 casper.run();
