@@ -1,14 +1,11 @@
-var casper = require('casper').create(creationOptions);
+var casper = require('casper').create({
+    verbose: true,
+    logLevel: 'error'
+});
 casper.start()
-
 
 var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
-};
-
-var creationOptions = {
-    verbose: true,
-    logLevel: 'error'
 };
 
 var cleanMp3Name = function(mp3Name) {
@@ -38,7 +35,6 @@ var getMp3Name = function(title, artist) {
 };
 
 var openTrack = function(pageUrl) {
-
     casper.then(function() {
         var streamMp3Address = '';
         var mp3Adress = '';
