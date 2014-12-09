@@ -93,8 +93,28 @@ var openTrack = function(pageUrl) {
     });
 };
 
+var openPlaylist = function(playlistUrl) {
+    casper.thenOpen(playlistUrl);
+    casper.then(function() {
+        var playlistLinks = this.evaluate(function() {
+            var links = [];
+            var listNodes = document.querySelectorAll('.listenDetails__trackList .trackItem__trackTitle');
+            for (var i = 0; i < listNodes.length; i++) {
+                links.push(listNodes[i].href);
+            }
+            return links;
+        });
 
-openTrack('https://soundcloud.com/firepowerrecs/2-phaseone-touching-the-stars?in=firepowerrecs/sets/phaseone-touching-the-stars');
-openTrack('https://soundcloud.com/your-ol-lady/autodidakt-kroyclub-popo-your-ol-lady-remix');
+        for (var i in playlistLinks) {
+            openTrack(playlistLinks[i]);
+        }
 
+    });
+};
+
+
+// openTrack('https://soundcloud.com/firepowerrecs/2-phaseone-touching-the-stars?in=firepowerrecs/sets/phaseone-touching-the-stars');
+// openTrack('https://soundcloud.com/your-ol-lady/autodidakt-kroyclub-popo-your-ol-lady-remix');
+
+openPlaylist('https://soundcloud.com/firepowerrecs/sets/phaseone-touching-the-stars');
 casper.run();
