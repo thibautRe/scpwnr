@@ -16,5 +16,10 @@ sudo npm install -g casperjs
 Run the script
 
 ```
-casperjs scpwnr.js
+casperjs scpwnr.js (options)
 ```
+
+Where options are the Soundcloud URL you want to pwn. It can be :
+- A track URL
+- A Set URL
+- A Profile URL (unstable)

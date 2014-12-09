@@ -182,10 +182,17 @@ var _open = function(url) {
     }
 };
 
-// openTrack('https://soundcloud.com/firepowerrecs/2-phaseone-touching-the-stars?in=firepowerrecs/sets/phaseone-touching-the-stars');
-// openTrack('https://soundcloud.com/airbattle/runwithme');
 
-_open('https://soundcloud.com/stelouse/sets/the-city-ep');
+// Open all the arguments in command line
+for (var i in casper.cli.args) {
+    _open(casper.cli.args[i]);
+}
 
-// openUserlist('https://soundcloud.com/brandon-zeier');
-casper.run();
+if (!casper.cli.args.length) {
+    casper.log('No arguments given !', 'error');
+    casper.exit();
+}
+else {
+    casper.run();
+}
+
