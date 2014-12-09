@@ -10,22 +10,20 @@ var creationOptions = {
 var cleanMp3Name = function(mp3Name) {
     // remove parenthesis for some useless shit
     var parenthesisTerms = 'FREE|EDM\\.COM|OUT NOW|ORIGINAL MIX';
-
     var regex = new RegExp('((?:\\(|\\[)[^\\]\\)]*)?(?:'+parenthesisTerms+')([^\\[\\(]*(?:\\)|\\]))?', 'ig');
-
     var mp3Name = mp3Name.replace(regex, '');
-    console.log(regex, mp3Name);
 
     return mp3Name.trim();
 };
 
 var getMp3Name = function(title, artist) {
+    var name = artist + ' - ' + title;
     // If the title is in the form 'artist - title'
     if (/\s-\s/.test(title)) {
-        return title;
+        name = title;
     }
 
-    return artist + ' - ' + title;
+    return cleanMp3Name(name);
 };
 
 var openTrack = function(pageUrl) {
@@ -84,7 +82,7 @@ var openTrack = function(pageUrl) {
 
             // Download the mp3
             this.then(function() {
-                this.download(mp3Adress, cleanMp3Name(getMp3Name(titleText, artistText))+ '.mp3');
+                this.download(mp3Adress, getMp3Name(titleText, artistText)+ '.mp3');
             })
         });
     });
