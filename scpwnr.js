@@ -4,14 +4,20 @@ var show = function(_object) {
 
 var creationOptions = {
     verbose: true,
-    logLevel: 'debug'
+    logLevel: 'error'
 }
+
+var getMp3Name = function(title, artist) {
+    return artist + ' - ' + title;
+};
 
 var openTrack = function(pageUrl) {
     var casper = require('casper').create(creationOptions);
 
     var streamMp3Address = '';
     var mp3Adress = '';
+    var titleText = '';
+    var artistText = '';
 
     casper.start(pageUrl);
     casper.then(function() {
@@ -32,6 +38,16 @@ var openTrack = function(pageUrl) {
         this.click('.heroPlayButton');
         this.wait(100);
 
+        // Retrieve the MP3 informations
+        // Retrive the title
+        if (this.exists('.soundTitle__titleHero')) {
+            titleText = this.getElementInfo('.soundTitle__titleHero').text.trim();
+        }
+        // Retrieve the artist
+        if (this.exists('.soundTitle__usernameHero')) {
+            artistText = this.getElementInfo('.soundTitle__usernameHero').text.trim();
+        }       
+
         // Open the stream MP3 address
         if (streamMp3Address == '') {
             this.log('No stream found', 'error');
@@ -51,13 +67,11 @@ var openTrack = function(pageUrl) {
 
             // Download the mp3
             this.then(function() {
-                this.download(mp3Adress, 'sup.mp3');
+                this.download(mp3Adress, getMp3Name(titleText, artistText)+ '.mp3');
             })
         });
     });
-
-
     casper.run();
-}
+};
 
-openTrack('https://soundcloud.com/buygore/elephnt');
+openTrack('https://soundcloud.com/shirobon/shibuya');
