@@ -4,18 +4,22 @@ casper.start()
 
 var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
-}
+};
 
 var creationOptions = {
     verbose: true,
     logLevel: 'error'
-}
+};
 
 var cleanMp3Name = function(mp3Name) {
+    // Change brackets to parenthesis
+    mp3Name = mp3Name.replace(/[\[\{]/, '(');
+    mp3Name = mp3Name.replace(/[\]\}]/, ')');
+
     // remove parenthesis for some useless shit
     var parenthesisTerms = 'FREE|EDM\\.COM|OUT NOW|ORIGINAL MIX';
-    var regex = new RegExp('((?:\\(|\\[)[^\\]\\)]*)?(?:'+parenthesisTerms+')([^\\[\\(]*(?:\\)|\\]))?', 'ig');
-    var mp3Name = mp3Name.replace(regex, '');
+    var regex = new RegExp('(\\([^\\)]*)?(?:'+parenthesisTerms+')([^\\(]*\\))?', 'ig');
+    mp3Name = mp3Name.replace(regex, '');
 
     return mp3Name.trim();
 };
@@ -25,6 +29,9 @@ var getMp3Name = function(title, artist) {
     // If the title is in the form 'artist - title'
     if (/\s-\s/.test(title)) {
         name = title;
+    }
+    else if (/\s\|\s/.test(title)) {
+        name = title.replace(/\s\|\s/, ' - ');
     }
 
     return cleanMp3Name(name);
@@ -114,7 +121,7 @@ var openPlaylist = function(playlistUrl) {
 
 
 // openTrack('https://soundcloud.com/firepowerrecs/2-phaseone-touching-the-stars?in=firepowerrecs/sets/phaseone-touching-the-stars');
-// openTrack('https://soundcloud.com/your-ol-lady/autodidakt-kroyclub-popo-your-ol-lady-remix');
+openTrack('https://soundcloud.com/edm/zes-bliss-edmcom-premiere');
 
-openPlaylist('https://soundcloud.com/firepowerrecs/sets/phaseone-touching-the-stars');
+// openPlaylist('https://soundcloud.com/firepowerrecs/sets/phaseone-touching-the-stars');
 casper.run();
