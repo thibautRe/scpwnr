@@ -1,7 +1,7 @@
 SCPWNR*
 =======
 
-Soundcloud Pwnr*. Helper to download songs from (Soundcloud)[http://soundcloud.com]
+Soundcloud Pwnr*. Helper to download songs from [Soundcloud](http://soundcloud.com)
 
 Installation
 ------
