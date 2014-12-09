@@ -15,6 +15,9 @@ var cleanMp3Name = function(mp3Name) {
     mp3Name = mp3Name.replace(/[\[\{]/, '(');
     mp3Name = mp3Name.replace(/[\]\}]/, ')');
 
+    // Remove '/'
+    mp3Name = mp3Name.replace(/\//g, '');
+
     // remove parenthesis for some useless shit
     var parenthesisTerms = 'FREE|EDM\\.COM|OUT NOW|ORIGINAL MIX';
     var regex = new RegExp('(\\([^\\)]*)?(?:'+parenthesisTerms+')([^\\(]*\\))?', 'ig');
