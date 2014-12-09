@@ -4,6 +4,8 @@ var casper = require('casper').create({
 });
 casper.start()
 
+var captureFolder = 'captures';
+
 var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
 };
@@ -56,7 +58,7 @@ var openTrack = function(pageUrl) {
             this.wait(1000);
             if (!this.exists('.heroPlayButton')) {
                 this.log('No play button found at ' + pageUrl, 'error');
-                this.capture(pageUrl + '.png');
+                this.capture(captureFolder + '/' +  pageUrl.replace(/\//g, '-') + '.png');
                 return;
             }
             this.click('.heroPlayButton');
