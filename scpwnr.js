@@ -53,12 +53,13 @@ var openTrack = function(pageUrl) {
             });
 
             // Click on the play button
+            this.wait(1000);
             if (!this.exists('.heroPlayButton')) {
-                this.log('No play button found', 'error');
+                this.log('No play button found at ' + pageUrl, 'error');
+                this.capture(pageUrl + '.png');
                 return;
             }
             this.click('.heroPlayButton');
-            this.wait(100);
 
             // Retrieve the MP3 informations
             // Retrive the title
