@@ -5,6 +5,7 @@ var casper = require('casper').create({
 casper.start()
 
 var captureFolder = 'captures';
+var musicFolder = 'music';
 
 var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
@@ -95,7 +96,7 @@ var openTrack = function(pageUrl) {
 
                 // Download the mp3
                 this.then(function() {
-                    this.download(mp3Adress, getMp3Name(titleText, artistText)+ '.mp3');
+                    this.download(mp3Adress, musicFolder + '/' + getMp3Name(titleText, artistText)+ '.mp3');
                 })
             });
         });
