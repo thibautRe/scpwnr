@@ -124,17 +124,6 @@ var openPlaylist = function(playlistUrl) {
     });
 };
 
-var openTrackOrPlaylist = function(url) {
-    if (/\/sets\//.test(url)) {
-        console.log('Open playlist');
-        openPlaylist(url);
-    }
-    else {
-        console.log('Open track ' + url);
-        openTrack(url);
-    }
-};
-
 var openUserlist = function(userlistUrl) {
     casper.thenOpen(userlistUrl);
     casper.then(function() {
@@ -152,18 +141,39 @@ var openUserlist = function(userlistUrl) {
         console.log('Found ' + linkList.length + ' track(s) or playlist(s)');
 
         for (var i in linkList) {
-            openTrackOrPlaylist(linkList[i]);
+            _open(linkList[i]);
         }
-
-
     });
 };
 
+// URL can be anything (a playlist, a userlist or a track)
+var _open = function(url) {
+    // If it is a userlist
+    //  https://soundcloud.com/thenoisyfreaks
+    //  https://soundcloud.com/thenoisyfreaks/
+    if (!/soundcloud\.com\/.*\/[\S]/.test(url)) {
+        casper.log('*** Open userlist', 'info');
+        openUserlist(url);
+    }
+
+    // If it is a playlist
+    // https://soundcloud.com/thenoisyfreaks/sets/straight-life-album
+    else if (/\/sets\//.test(url) && !/(\?in=).*\/sets\//.test(url)) {
+        casper.log('*** Open playlist', 'info');
+        openPlaylist(url);
+    }
+
+    // It is a track
+    else {
+        casper.log('*** Open track', 'info');
+        openTrack(url);
+    }
+};
 
 // openTrack('https://soundcloud.com/firepowerrecs/2-phaseone-touching-the-stars?in=firepowerrecs/sets/phaseone-touching-the-stars');
 // openTrack('https://soundcloud.com/airbattle/runwithme');
 
-openPlaylist('https://soundcloud.com/thenoisyfreaks/sets/straight-life-album');
+_open('https://soundcloud.com/thenoisyfreaks/the-noisy-freaks-tonight-teaser-out-aug-20th-on-lowtemp');
 
 // openUserlist('https://soundcloud.com/brandon-zeier');
 casper.run();
