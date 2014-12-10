@@ -16,8 +16,9 @@ var cleanMp3Name = function(mp3Name) {
     mp3Name = mp3Name.replace(/[\[\{]/, '(');
     mp3Name = mp3Name.replace(/[\]\}]/, ')');
 
-    // Remove '/'
+    // Remove '/', '"'
     mp3Name = mp3Name.replace(/\//g, '');
+    mp3Name = mp3Name.replace(/"/g, '');
 
     // remove parenthesis for some useless shit
     var parenthesisTerms = 'FREE|EDM\\.COM|OUT NOW|ORIGINAL MIX';
@@ -29,12 +30,20 @@ var cleanMp3Name = function(mp3Name) {
 
 var getMp3Name = function(title, artist) {
     var name = artist + ' - ' + title;
+
     // If the title is in the form 'artist - title'
-    if (/\s-\s/.test(title)) {
-        name = title;
+    // Test if there's already a separator in title.
+    var separators = ['-', '–', '\\|'];
+    var regex = '';
+    for (var i in separators) {
+        regex += '(?:\\s'+separators[i]+'\\s)';
+        if (i < separators.length - 1) {
+            regex += '|';
+        }
     }
-    else if (/\s\|\s/.test(title)) {
-        name = title.replace(/\s\|\s/, ' - ');
+    regex = new RegExp(regex);
+    if (regex.test(title)) {
+        name = title.replace(regex, ' - ');
     }
 
     return cleanMp3Name(name);
