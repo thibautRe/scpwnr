@@ -24,7 +24,7 @@
 
   // on submit
   requestForm.submit(function() {
-    $('body').append('<div>Convesion begin...</div>')
+    $('body').append('<div>Conversion begin...</div>')
     io.emit('song-conversion-request', requestForm.serializeArray()[0].value)
     return false;
   });
