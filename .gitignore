@@ -3,3 +3,4 @@ captures/
 node_modules/
 *.sublime-project
 *.sublime-workspace
+public/vendor/
