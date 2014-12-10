@@ -1,11 +1,34 @@
-var casper = require('casper').create({
-    verbose: true,
-    logLevel: 'error'
-});
-casper.start()
-
 var captureFolder = 'captures';
 var musicFolder = 'music';
+
+var Spooky = require('spooky');
+var spooky = new Spooky({
+    child: {
+        transport: 'http'
+    },
+    casper: {
+        verbose: true,
+        logLevel: 'error'
+    }
+}, function (err) {
+    if (err) {
+        e = new Error('Failed to initialize SpookyJS');
+        e.details = err;
+        throw e;
+    }
+
+    spooky.start('');
+    var urls = [
+        'https://soundcloud.com/mrbillstunes/gourmet-everything'
+    ]
+
+    // Open all the arguments in command line
+    for (var i in urls) {
+        _open(spooky, urls[i]);
+    }
+
+    spooky.run();
+});
 
 var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
@@ -49,13 +72,15 @@ var getMp3Name = function(title, artist) {
     return cleanMp3Name(name);
 };
 
-var openTrack = function(pageUrl) {
-    casper.then(function() {
+var openTrack = function(spooky, pageUrl) {
+    spooky.then(function() {
+        console.log('DEBUG');
         var streamMp3Address = '';
         var mp3Adress = '';
         var titleText = '';
         var artistText = '';
         var albumText = '';
+
 
         if (/\/sets\/(.*)/.test(pageUrl)) {
             albumText = /\/sets\/(.*)/.exec(pageUrl)[1];
@@ -67,15 +92,15 @@ var openTrack = function(pageUrl) {
             this.on('resource.requested', function(resource) {
                 if (/api.soundcloud.com.*stream/i.test(resource.url)) {
                     streamMp3Address = resource.url;
-                    this.log('*** Stream adress: GOTCHA', 'info');
-                    this.log('*** Stream adress: ' + streamMp3Address, 'debug');
+                    console.log('*** Stream adress: GOTCHA');
+                    console.log('*** Stream adress: ' + streamMp3Address);
                 }
             });
 
             // Click on the play button
             this.wait(1000);
             if (!this.exists('.heroPlayButton')) {
-                this.log('No play button found at ' + pageUrl, 'error');
+                console.log('No play button found at ' + pageUrl);
                 this.capture(captureFolder + '/' +  pageUrl.replace(/\//g, '-') + '.png');
                 return;
             }
@@ -93,7 +118,7 @@ var openTrack = function(pageUrl) {
 
             // Open the stream MP3 address
             if (streamMp3Address == '') {
-                this.log('No stream found', 'error');
+                console.log('No stream found');
                 return;
             }
             this.thenOpen(streamMp3Address, {
@@ -105,8 +130,8 @@ var openTrack = function(pageUrl) {
 
                 // Get the MP3 address
                 mp3Adress = JSON.parse(this.getPageContent()).http_mp3_128_url;
-                this.log('*** Mp3 adress: GOTCHA', 'info');
-                this.log('*** Mp3 adress: ' + mp3Adress, 'info');
+                console.log('*** Mp3 adress: GOTCHA');
+                console.log('*** Mp3 adress: ' + mp3Adress);
 
                 // Download the mp3
                 this.then(function() {
@@ -125,9 +150,9 @@ var openTrack = function(pageUrl) {
     });
 };
 
-var openSet = function(setUrl) {
-    casper.thenOpen(setUrl);
-    casper.then(function() {
+var openSet = function(spooky, setUrl) {
+    spooky.thenOpen(setUrl);
+    spooky.then(function() {
         var setLinks = this.evaluate(function() {
             var setLinks = [];
             var listNodes = document.querySelectorAll('.listenDetails__trackList .trackItem__trackTitle');
@@ -146,9 +171,9 @@ var openSet = function(setUrl) {
     });
 };
 
-var openUserlist = function(userlistUrl) {
-    casper.thenOpen(userlistUrl);
-    casper.then(function() {
+var openUserlist = function(spooky, userlistUrl) {
+    spooky.thenOpen(userlistUrl);
+    spooky.then(function() {
         var linkList = this.evaluate(function() {
             var linkList = [];
             var listNodes = document.querySelectorAll('.userStreamItem a.soundTitle__title');
@@ -169,40 +194,26 @@ var openUserlist = function(userlistUrl) {
 };
 
 // URL can be anything (a set, a userlist or a track)
-var _open = function(url) {
+var _open = function(spooky, url) {
     // If it is a userlist
     //  https://soundcloud.com/thenoisyfreaks
     //  https://soundcloud.com/thenoisyfreaks/
     if (!/soundcloud\.com\/.*\/[\S]/.test(url)) {
-        casper.log('*** Open userlist', 'info');
-        openUserlist(url);
+        console.log('*** Open userlist');
+        openUserlist(spooky, url);
     }
 
     // If it is a set
     // https://soundcloud.com/thenoisyfreaks/sets/straight-life-album
     else if (/\/sets\//.test(url) && !/(\?in=).*\/sets\//.test(url)) {
-        casper.log('*** Open set', 'info');
-        openSet(url);
+        console.log('*** Open set');
+        openSet(spooky, url);
     }
 
     // It is a track
     else {
-        casper.log('*** Open track', 'info');
-        openTrack(url);
+        console.log('*** Open track');
+        openTrack(spooky, url);
+        console.log('debug2');
     }
 };
-
-
-// Open all the arguments in command line
-for (var i in casper.cli.args) {
-    _open(casper.cli.args[i]);
-}
-
-if (!casper.cli.args.length) {
-    casper.log('No arguments given !', 'error');
-    casper.exit();
-}
-else {
-    casper.run();
-}
-
