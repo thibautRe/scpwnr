@@ -1,2 +1,5 @@
-music/*
-captures/*
+music/
+captures/
+node_modules/
+*.sublime-project
+*.sublime-workspace
