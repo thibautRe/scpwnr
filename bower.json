@@ -1,0 +1,24 @@
+{
+  "name": "scpwnr",
+  "main": "server.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/thibautRe/scpwnr",
+  "authors": [
+    "Thibaut REMY <thibaut.remy@domora.com>"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "WTFPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "zepto": "~1.1.4"
+  }
+}
