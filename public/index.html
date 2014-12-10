@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sup</title>
+</head>
+<body>
+
+<form action="/song">
+    <input name="url"/>
+    <button type="submit">Convertir</button>
+</form>
+
+<script type="text/javascript" src="/vendor/zepto/zepto.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var io = io.connect();
+
+  // Listen for the talk event.
+  io.on('song-conversion-finish', function(data) {
+    $('body').append('<div>Conversion finished</div>')
+  });
+
+  var requestForm = $('form');
+
+  // on submit
+  requestForm.submit(function() {
+    $('body').append('<div>Convesion begin...</div>')
+    io.emit('song-conversion-request', requestForm.serializeArray()[0].value)
+    return false;
+  });
+
+</script>
+</body>
