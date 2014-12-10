@@ -118,9 +118,6 @@ var openTrack = function(pageUrl) {
                         path = musicFolder + '/' + albumText + '/' + getMp3Name(titleText, artistText)+ '.mp3'
                     }
 
-                    this.onResourceReceived(function(data) {
-                        console.log(data);
-                    });
                     this.download(mp3Adress, path);
                 })
             });

@@ -3,6 +3,7 @@ var app = express();
 var exec = require('child_process').exec;
 
 app.http().io();
+app.use(express.static('public'));
 
 var addToQueue = function(req, url) {
     exec('casperjs scpwnr.js ' + url, function(error, stdout, stderr) {
@@ -10,14 +11,10 @@ var addToQueue = function(req, url) {
     });
 };
 
-app.use(express.static('public'));
-
-// Setup your sessions, just like normal.
-// app.use(express.cookieParser())
-// app.use(express.session({secret: 'monkey'}))
-
 app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/public/index.html')
+    req.session.loginDate = new Date().toString();
+    req.session.name = req.session.loginDate;
+    res.sendfile(__dirname + '/public/index.html');
 });
 
 app.io.route('song-conversion-request', function(req) {
