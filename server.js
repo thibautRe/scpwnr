@@ -9,9 +9,17 @@ app.get('/', function (req, res) {
 });
 
 app.get('/song', function(req, res) {
+    res.sendfile(__dirname + '/public/test.html');
+
     exec('casperjs scpwnr.js ' + req.query.url, function(error, stdout, stderr) {
-        console.log('plop');
-        res.send(req.query.url);
+        console.log('Download complete');
+        req.io.broadcast('song-conversion-finish');
+    });
+});
+
+app.io.route('song-conversion-finish', function(req) {
+    req.io.respond({
+        'song-conversion-finish': 'FINITO'
     });
 });
 
