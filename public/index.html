@@ -20,10 +20,10 @@
   };
 
   // Listen for the talk event.
-  io.on('song-conversion-type', function(data) {
+  io.on('conv-type', function(data) {
     message('Got URL type : ' + data.type);
   })
-  io.on('song-conversion-finish', function(data) {
+  io.on('conv-finish', function(data) {
     message('Conversion finished');
   });
 
@@ -32,7 +32,7 @@
   // on submit
   requestForm.submit(function() {
     message('Conversion begin...');
-    io.emit('song-conversion-request', requestForm.serializeArray()[0].value)
+    io.emit('conv-request', requestForm.serializeArray()[0].value)
     return false;
   });
 

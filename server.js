@@ -8,7 +8,7 @@ app.use(express.static('public'));
 var addToQueue = function(req, url) {
     exec('casperjs scpwnr.js --format=type ' + url, function(error, stdout, stderr) {
         var type = stdout.trim();
-        req.io.emit('song-conversion-type', {type: type});
+        req.io.emit('conv-type', {type: type});
     });
 };
 
@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
     res.sendfile(__dirname + '/public/index.html');
 });
 
-app.io.route('song-conversion-request', function(req) {
+app.io.route('conv-request', function(req) {
     addToQueue(req, req.data);
 });
 
