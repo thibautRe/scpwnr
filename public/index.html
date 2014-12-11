@@ -15,16 +15,23 @@
 <script>
   var io = io.connect();
 
+  var message = function(mess) {
+    $('body').append('<div>' + mess + '</div>')
+  };
+
   // Listen for the talk event.
+  io.on('song-conversion-type', function(data) {
+    message('Got URL type : ' + data.type);
+  })
   io.on('song-conversion-finish', function(data) {
-    $('body').append('<div>Conversion finished</div>')
+    message('Conversion finished');
   });
 
   var requestForm = $('form');
 
   // on submit
   requestForm.submit(function() {
-    $('body').append('<div>Conversion begin...</div>')
+    message('Conversion begin...');
     io.emit('song-conversion-request', requestForm.serializeArray()[0].value)
     return false;
   });

@@ -6,8 +6,9 @@ app.http().io();
 app.use(express.static('public'));
 
 var addToQueue = function(req, url) {
-    exec('casperjs scpwnr.js ' + url, function(error, stdout, stderr) {
-        req.io.emit('song-conversion-finish');
+    exec('casperjs scpwnr.js --format=type ' + url, function(error, stdout, stderr) {
+        var type = stdout.trim();
+        req.io.emit('song-conversion-type', {type: type});
     });
 };
 
@@ -27,4 +28,3 @@ var server = app.listen(3000, function () {
 
     console.log('Example app listening at http://%s:%s', host, port);
 });
-
