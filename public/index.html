@@ -2,12 +2,17 @@
 <html>
 <head>
   <title>Sup</title>
+  <link rel="stylesheet" type="text/css" href="/styles/app.css">
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
-<form action="/song">
-    <input name="url"/>
-    <button type="submit">Convertir</button>
+<h1>Sc Pwnr*</h1>
+<h2>Soundcloud's home-made, powerful, and fresh Pwnr.</h2>
+
+<form class="form--main js-form--main" action="/song">
+  <input class="form-square form-url" name="url"/>
+  <button class="form-square form-submit" type="submit">Convertir</button>
 </form>
 
 <script type="text/javascript" src="/vendor/zepto/zepto.js"></script>
@@ -17,7 +22,7 @@
   var io = io.connect();
 
   var message = function(mess) {
-    $('body').append('<div>' + mess + '</div>')
+    $('body').append('<div>' + mess + '</div>');
   };
 
   // Listen for the talk event.
@@ -31,7 +36,7 @@
     message('Conversion error !');
   });
 
-  var requestForm = $('form');
+  var requestForm = $('.js-form--main');
 
   // on submit
   requestForm.submit(function() {
