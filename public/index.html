@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sup</title>
+  <title>Soundcloud Pwnr*</title>
   <link rel="stylesheet" type="text/css" href="/styles/app.css">
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700' rel='stylesheet' type='text/css'>
 </head>
@@ -14,6 +14,8 @@
   <input class="form-square form-url" name="url"/>
   <button class="form-square form-submit" type="submit">Convertir</button>
 </form>
+
+<span class="song-type js-song-type"></span>
 
 <script type="text/javascript" src="/vendor/zepto/zepto.js"></script>
 <script type="text/javascript" src="/scripts/scpwnr-client.js"></script>
@@ -41,7 +43,10 @@
   // on submit
   requestForm.submit(function() {
     var url = requestForm.serializeArray()[0].value;
-    message(getUrlType(url));
+    $('.js-song-type').text(getUrlType(url));
+
+    // Disable the form
+    $('js-form--main input').attr('disabled', 'true');
 
     io.emit('conv-request', {
       url: url,
