@@ -6,9 +6,12 @@ app.http().io();
 app.use(express.static('public'));
 
 var addToQueue = function(req, url) {
-    exec('casperjs scpwnr.js --format=type ' + url, function(error, stdout, stderr) {
-        var type = stdout.trim();
-        req.io.emit('conv-type', {type: type});
+    exec('casperjs scpwnr.js ' + url, function(error, stdout, stderr) {
+        if (error != null) {
+            req.io.emit('conv-error');
+        }
+
+        req.io.emit('conv-finish');
     });
 };
 
@@ -19,7 +22,7 @@ app.get('/', function (req, res) {
 });
 
 app.io.route('conv-request', function(req) {
-    addToQueue(req, req.data);
+    addToQueue(req, req.data.url);
 });
 
 var server = app.listen(3000, function () {

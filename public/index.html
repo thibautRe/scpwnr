@@ -11,6 +11,7 @@
 </form>
 
 <script type="text/javascript" src="/vendor/zepto/zepto.js"></script>
+<script type="text/javascript" src="/scripts/scpwnr-client.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var io = io.connect();
@@ -20,19 +21,29 @@
   };
 
   // Listen for the talk event.
-  io.on('conv-type', function(data) {
-    message('Got URL type : ' + data.type);
-  })
   io.on('conv-finish', function(data) {
     message('Conversion finished');
+  });
+  io.on('conv-prog', function(data) {
+    message('Conversion : progression ' + data.percent + "%");
+  });
+  io.on('conv-error', function(data) {
+    message('Conversion error !');
   });
 
   var requestForm = $('form');
 
   // on submit
   requestForm.submit(function() {
+    var url = requestForm.serializeArray()[0].value;
+    message(getUrlType(url));
+
+    io.emit('conv-request', {
+      url: url,
+      type: getUrlType(url)
+    });
+
     message('Conversion begin...');
-    io.emit('conv-request', requestForm.serializeArray()[0].value)
     return false;
   });
 

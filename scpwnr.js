@@ -6,6 +6,7 @@ var casper = require('casper').create({
 var captureFolder = 'captures';
 var musicFolder = 'music';
 
+var scpwnrClient = require('public/scripts/scpwnr-client.js');
 
 var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
@@ -48,25 +49,6 @@ var getMp3Name = function(title, artist) {
 
     return cleanMp3Name(name);
 };
-
-// Return the type of the url
-var getUrlType = function(url) {
-    // If it is a userlist
-    //  https://soundcloud.com/thenoisyfreaks
-    //  https://soundcloud.com/thenoisyfreaks/
-    if (!/soundcloud\.com\/.*\/[\S]/.test(url)) {
-        return 'user';
-    }
-
-    // If it is a set
-    // https://soundcloud.com/thenoisyfreaks/sets/straight-life-album
-    else if (/\/sets\//.test(url) && !/(\?in=).*\/sets\//.test(url)) {
-        return 'set';
-    }
-
-    // Else, it is a track
-    return 'track';
-}
 
 var openTrack = function(pageUrl) {
     casper.then(function() {
@@ -189,7 +171,13 @@ var openUserlist = function(userlistUrl) {
 
 // URL can be anything (a set, a userlist or a track)
 var _open = function(url) {
-    var type = getUrlType(url);
+    var type;
+    if (casper.cli.options.type === undefined) {
+        type = scpwnrClient.getUrlType(url);
+    }
+    else {
+        type = casper.cli.options.type;
+    }
 
     if (type == 'track') {
         openTrack(url);
@@ -204,16 +192,8 @@ var _open = function(url) {
 
 casper.start();
 
-
-if (casper.cli.options.format == 'type') {
-    console.log(getUrlType(casper.cli.args[0]));
-    casper.exit();
-}
-
 // Open all the arguments in command line
-for (var i in casper.cli.args) {
-    _open(casper.cli.args[i]);
-}
+_open(casper.cli.args[0]);
 
 if (!casper.cli.args.length) {
     casper.log('No arguments given !', 'error');
