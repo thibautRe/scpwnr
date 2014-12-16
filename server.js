@@ -15,6 +15,7 @@ var addToQueue = function(req, url) {
                     stderr: stderr
                 }
             });
+            return;
         }
 
         req.io.emit('conv-finish');
