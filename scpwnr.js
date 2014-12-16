@@ -76,8 +76,8 @@ var openTrack = function(pageUrl) {
             // Click on the play button
             this.wait(1000);
             if (!this.exists('.heroPlayButton')) {
-                this.log('No play button found at ' + pageUrl, 'error');
                 this.capture(captureFolder + '/' +  pageUrl.replace(/\//g, '-') + '.png');
+                this.die('No play button found at ' + pageUrl, 1);
                 return;
             }
             this.click('.heroPlayButton');
@@ -94,8 +94,7 @@ var openTrack = function(pageUrl) {
 
             // Open the stream MP3 address
             if (streamMp3Address == '') {
-                this.log('No stream found', 'error');
-                return;
+                this.die('No stream found', 1);
             }
             this.thenOpen(streamMp3Address, {
                 method: 'get',
@@ -138,7 +137,9 @@ var openSet = function(setUrl) {
             return setLinks;
         });
 
-        console.log('Found ' + setLinks.length + ' song(s)');
+        if (setLinks.length == 0) {
+            this.die("No song(s) in set found !", 1);
+        }
 
         for (var i in setLinks) {
             openTrack(setLinks[i]);
@@ -161,7 +162,9 @@ var openUserlist = function(userlistUrl) {
             return linkList;
         });
 
-        console.log('Found ' + linkList.length + ' track(s) or set(s)');
+        if (linkList.length == 0) {
+            this.die("No song(s) in userlist found !");
+        }
 
         for (var i in linkList) {
             _open(linkList[i]);
@@ -189,6 +192,7 @@ var _open = function(url) {
         openUserlist(url);
     }
 };
+
 
 casper.start();
 
