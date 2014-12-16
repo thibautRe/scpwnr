@@ -1,7 +1,12 @@
-var casper = require('casper').create({
+var casperModule = require('casper')
+var casperOptions = {
     verbose: true,
-    logLevel: 'error'
-});
+    logLevel: 'error',
+    colorizerType: 'Dummy'
+};
+
+// Create casper instance
+var casper = casperModule.create(casperOptions);
 
 var captureFolder = 'captures';
 var musicFolder = 'music';

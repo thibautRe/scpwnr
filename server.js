@@ -6,9 +6,15 @@ app.http().io();
 app.use(express.static('public'));
 
 var addToQueue = function(req, url) {
-    exec('casperjs scpwnr.js ' + url, function(error, stdout, stderr) {
+    exec('casperjs scpwnr.js --log-level=error ' + url, function(error, stdout, stderr) {
+        // Emit an error if conversion script fails
         if (error != null) {
-            req.io.emit('conv-error');
+            req.io.emit('conv-error', {
+                consoleMsg: {
+                    stdout: stdout,
+                    stderr: stderr
+                }
+            });
         }
 
         req.io.emit('conv-finish');

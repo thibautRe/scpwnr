@@ -35,7 +35,7 @@
     message('Conversion : progression ' + data.percent + "%");
   });
   io.on('conv-error', function(data) {
-    message('Conversion error !');
+    message('Conversion error : ' + data.consoleMsg.stdout);
   });
 
   var requestForm = $('.js-form--main');
