@@ -17,11 +17,34 @@
 
 <span class="song-type js-song-type"></span>
 
+<!-- ko foreach: conversions -->
+  <div>
+    ID <span data-bind="text: id"></span>
+    STATUS <span data-bind="text: status"></span>
+  </div>
+<!-- /ko -->
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>
 <script type="text/javascript" src="/vendor/zepto/zepto.js"></script>
 <script type="text/javascript" src="/scripts/scpwnr-client.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var io = io.connect();
+  var conversions = ko.observableArray([]);
+
+  var Conversion = function(id) {
+    this.id = id;
+    this.status = ko.observable();
+  };
+
+  var findConversionById = function(id) {
+    var _conversions = conversions();
+    for (var i in _conversions) {
+      if (_conversions[i].id == id) {
+        return _conversions[i];
+      }
+    }
+  };
 
   var message = function(mess) {
     $('body').append('<div>' + mess + '</div>');
@@ -29,13 +52,17 @@
 
   // Listen for the talk event.
   io.on('conv-begin', function(data) {
-    message('Conversion begin : ' + data.id);
+    var newConversion = new Conversion(data.id);
+    conversions.push(newConversion);
+    newConversion.status('pending');
   });
   io.on('conv-finish', function(data) {
-    message('Conversion finished (ID: ' + data.id + ')');
+    var conversion = findConversionById(data.id);
+    conversion.status('finish');
   });
   io.on('conv-error', function(data) {
-    message('Conversion error : ' + data.consoleMsg.stdout);
+    var conversion = findConversionById(data.id);
+    conversion.status('error');
   });
 
   var requestForm = $('.js-form--main');
@@ -60,6 +87,10 @@
     });
 
     return false;
+  });
+
+  ko.applyBindings({
+    conversions: conversions
   });
 
 </script>
