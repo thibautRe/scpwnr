@@ -202,7 +202,7 @@ var _open = function(url) {
 casper.start();
 
 // Open all the arguments in command line
-_open(casper.cli.args[0]);
+_open(scpwnrClient.getCleanedUrl(casper.cli.args[0]));
 
 if (!casper.cli.args.length) {
     casper.log('No arguments given !', 'error');
