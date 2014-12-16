@@ -15,11 +15,28 @@ var getUrlType = function(url) {
 
     // Else, it is a track
     return 'track';
-}
+};
+
+// Return the cleaned URL or undefined if the URL cannot be cleaned.
+var getCleanedUrl = function(url) {
+    // OK url
+    if (/^https?:\/\/(www\.)?soundcloud\.com/.test(url)) {
+        return url;
+    }
+    // https:// missing
+    else if (/^(www\.)?soundcloud\.com\//.test(url)) {
+        return 'https://' + url;
+    }
+
+    else {
+        return undefined;
+    }
+};
 
 // NodeJS related
 if (module && module.exports) {
     module.exports = {
-        'getUrlType': getUrlType
+        'getUrlType': getUrlType,
+        'getCleanedUrl': getCleanedUrl
     };
 }
