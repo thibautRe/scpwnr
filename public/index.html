@@ -28,11 +28,11 @@
   };
 
   // Listen for the talk event.
-  io.on('conv-finish', function(data) {
-    message('Conversion finished');
+  io.on('conv-begin', function(data) {
+    message('Conversion begin : ' + data.id);
   });
-  io.on('conv-prog', function(data) {
-    message('Conversion : progression ' + data.percent + "%");
+  io.on('conv-finish', function(data) {
+    message('Conversion finished (ID: ' + data.id + ')');
   });
   io.on('conv-error', function(data) {
     message('Conversion error : ' + data.consoleMsg.stdout);
@@ -48,7 +48,7 @@
       message('URL unrecognized');
       return false;
     }
-    
+
     $('.js-song-type').text(getUrlType(url));
 
     // Disable the form
@@ -59,7 +59,6 @@
       type: getUrlType(url)
     });
 
-    message('Conversion begin...');
     return false;
   });
 

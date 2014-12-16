@@ -5,11 +5,14 @@ var exec = require('child_process').exec;
 app.http().io();
 app.use(express.static('public'));
 
-var addToQueue = function(req, url) {
+var conversionID = 0;
+
+var addToQueue = function(req, url, conversionID) {
     exec('casperjs scpwnr.js --log-level=error ' + url, function(error, stdout, stderr) {
         // Emit an error if conversion script fails
         if (error != null) {
             req.io.emit('conv-error', {
+                id: conversionID,
                 consoleMsg: {
                     stdout: stdout,
                     stderr: stderr
@@ -18,7 +21,9 @@ var addToQueue = function(req, url) {
             return;
         }
 
-        req.io.emit('conv-finish');
+        req.io.emit('conv-finish', {
+            id: conversionID
+        });
     });
 };
 
@@ -29,7 +34,9 @@ app.get('/', function (req, res) {
 });
 
 app.io.route('conv-request', function(req) {
-    addToQueue(req, req.data.url);
+    conversionID++;
+    req.io.emit('conv-begin', {id: conversionID});
+    addToQueue(req, req.data.url, conversionID);
 });
 
 var server = app.listen(3000, function () {
