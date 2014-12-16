@@ -42,7 +42,13 @@
 
   // on submit
   requestForm.submit(function() {
-    var url = requestForm.serializeArray()[0].value;
+    var url = getCleanedUrl(requestForm.serializeArray()[0].value);
+
+    if (url === undefined) {
+      message('URL unrecognized');
+      return false;
+    }
+    
     $('.js-song-type').text(getUrlType(url));
 
     // Disable the form
