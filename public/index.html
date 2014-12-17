@@ -16,7 +16,7 @@
 </form>
 
 <!-- ko foreach: conversions -->
-  <div class="conversion">
+  <div class="conversion" data-bind="style: $root.getStyleFromStatus(status)">
     <div class="conversion-info">
       <h3 class="conversion-info-title">ID</h3>
       <span class="conversion-info-desc" data-bind="text: id"></span>
@@ -27,7 +27,7 @@
     </div>
     <div class="conversion-info">
       <h3 class="conversion-info-title">Status</h3>
-      <span class="conversion-info-desc" data-bind="text: status, style: $root.getStyleFromStatus(status)"></span>
+      <span class="conversion-info-desc" data-bind="text: status"></span>
     </div>
     <!-- ko if: errorMsg -->
     <div class="conversion-info">
@@ -42,17 +42,11 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>
 <script type="text/javascript" src="/scripts/scpwnr-client.js"></script>
+<script type="text/javascript" src="/scripts/conversion.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var io = io.connect();
   var conversions = ko.observableArray([]);
-
-  var Conversion = function(id) {
-    this.id = id;
-    this.status = ko.observable();
-    this.url = ko.observable();
-    this.errorMsg = ko.observable();
-  };
 
   var findConversionById = function(id) {
     var _conversions = conversions();
@@ -106,10 +100,10 @@
     conversions: conversions,
     getStyleFromStatus: function(status) {
       if (status() == 'finish') {
-        return {'color': 'green'}
+        return {'background-color': 'rgba(20,240,20,.1)'}
       }
       else if (status() == 'error') {
-        return {'color': 'red'}
+        return {'background-color': 'rgba(240,20,20,.1)'}
       }
     }
   });
