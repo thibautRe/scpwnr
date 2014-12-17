@@ -17,10 +17,11 @@
 
 <!-- ko foreach: conversions -->
   <div class="conversion" data-bind="style: $root.getStyleFromStatus(status)">
+    <button class="conversion-delete" data-bind="click: function() {$root.deleteConversion($data)}">&times;</button>
     <!-- ko ifnot: isExpanded -->
       <button class="conversion-seemore" data-bind="click: expand">Voir plus </button>
     <!-- /ko -->
-    
+
     <!-- ko if: isExpanded -->
       <div class="conversion-info">
         <h3 class="conversion-info-title">ID</h3>
@@ -111,6 +112,9 @@
       else if (status() == 'error') {
         return {'background-color': 'rgba(240,20,20,.1)'}
       }
+    },
+    deleteConversion: function(conversion) {
+      conversions.remove(conversion);
     }
   });
 
