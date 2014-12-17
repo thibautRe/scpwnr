@@ -17,23 +17,29 @@
 
 <!-- ko foreach: conversions -->
   <div class="conversion" data-bind="style: $root.getStyleFromStatus(status)">
-    <div class="conversion-info">
-      <h3 class="conversion-info-title">ID</h3>
-      <span class="conversion-info-desc" data-bind="text: id"></span>
-    </div>
-    <div class="conversion-info">
-      <h3 class="conversion-info-title">URL</h3>
-      <span class="conversion-info-desc" data-bind="text: url"></span>
-    </div>
-    <div class="conversion-info">
-      <h3 class="conversion-info-title">Status</h3>
-      <span class="conversion-info-desc" data-bind="text: status"></span>
-    </div>
-    <!-- ko if: errorMsg -->
-    <div class="conversion-info">
-      <h3 class="conversion-info-title">Error msg</h3>
-      <span class="conversion-info-desc" data-bind="text: errorMsg"></span>
-    </div>
+    <!-- ko ifnot: isExpanded -->
+      <button class="conversion-seemore" data-bind="click: expand">Voir plus </button>
+    <!-- /ko -->
+    
+    <!-- ko if: isExpanded -->
+      <div class="conversion-info">
+        <h3 class="conversion-info-title">ID</h3>
+        <span class="conversion-info-desc" data-bind="text: id"></span>
+      </div>
+      <div class="conversion-info">
+        <h3 class="conversion-info-title">URL</h3>
+        <span class="conversion-info-desc" data-bind="text: url"></span>
+      </div>
+      <div class="conversion-info">
+        <h3 class="conversion-info-title">Status</h3>
+        <span class="conversion-info-desc" data-bind="text: status"></span>
+      </div>
+      <!-- ko if: errorMsg -->
+      <div class="conversion-info">
+        <h3 class="conversion-info-title">Error msg</h3>
+        <span class="conversion-info-desc" data-bind="text: errorMsg"></span>
+      </div>
+      <!-- /ko -->
     <!-- /ko -->
   </div>
 <!-- /ko -->

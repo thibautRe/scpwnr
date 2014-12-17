@@ -71,8 +71,10 @@ h2 {
 
 /* Conversion */
 .conversion {
+  position: relative;
   background-color: rgba(150,150,160,.15);
   padding: 10px;
+  padding-right: 50px;
   width: 80%;
   max-width: 550px;
   margin: auto;
@@ -85,6 +87,17 @@ h2 {
 
   transition: .2s background-color;
   -webkit-transition: .2s background-color;
+}
+
+.conversion-seemore {
+  background-color: transparent;
+  border: none;
+  font-size: .8em;
+  font-weight: 500;
+  padding: 5px;
+  outline: 0;
+  color: inherit;
+  cursor: pointer;
 }
 
 .conversion-info {
