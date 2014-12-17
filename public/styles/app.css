@@ -82,6 +82,9 @@ h2 {
   box-shadow: 0 2px 10px rgba(0,0,0,.1);
   color: rgb(86, 105, 108);
   text-align: left;
+
+  transition: .2s background-color;
+  -webkit-transition: .2s background-color;
 }
 
 .conversion-info {
