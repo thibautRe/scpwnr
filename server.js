@@ -35,7 +35,9 @@ app.get('/', function (req, res) {
 
 app.io.route('conv-request', function(req) {
     conversionID++;
-    req.io.emit('conv-begin', {id: conversionID});
+    req.io.emit('conv-begin', {
+        id: conversionID, url: req.data.url
+    });
     addToQueue(req, req.data.url, conversionID);
 });
 

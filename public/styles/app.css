@@ -81,4 +81,22 @@ h2 {
   border-radius: 3px;
   box-shadow: 0 2px 10px rgba(0,0,0,.1);
   color: rgb(86, 105, 108);
+  text-align: left;
 }
+
+.conversion-info {
+  font-size: .7em;
+}
+
+.conversion-info-title {
+  display: inline-block;
+  width: 60px;
+  margin: 0px;
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.conversion-info-desc {
+  font-size: .8em;
+}
+

@@ -17,8 +17,18 @@
 
 <!-- ko foreach: conversions -->
   <div class="conversion">
-    ID <span data-bind="text: id"></span>
-    STATUS <span data-bind="text: status"></span>
+    <div class="conversion-info">
+      <h3 class="conversion-info-title">ID</h3>
+      <span class="conversion-info-desc" data-bind="text: id"></span>
+    </div>
+    <div class="conversion-info">
+      <h3 class="conversion-info-title">URL</h3>
+      <span class="conversion-info-desc" data-bind="text: url"></span>
+    </div>
+    <div class="conversion-info">
+      <h3 class="conversion-info-title">Status</h3>
+      <span class="conversion-info-desc" data-bind="text: status, style: $root.getStyleFromStatus(status)"></span>
+    </div>
   </div>
 <!-- /ko -->
 
@@ -34,6 +44,7 @@
   var Conversion = function(id) {
     this.id = id;
     this.status = ko.observable();
+    this.url = ko.observable();
   };
 
   var findConversionById = function(id) {
@@ -50,6 +61,7 @@
     var newConversion = new Conversion(data.id);
     conversions.push(newConversion);
     newConversion.status('pending');
+    newConversion.url(data.url);
   });
   io.on('conv-finish', function(data) {
     var conversion = findConversionById(data.id);
@@ -83,7 +95,15 @@
   });
 
   ko.applyBindings({
-    conversions: conversions
+    conversions: conversions,
+    getStyleFromStatus: function(status) {
+      if (status() == 'finish') {
+        return {'color': 'green'}
+      }
+      else if (status() == 'error') {
+        return {'color': 'red'}
+      }
+    }
   });
 
 </script>
