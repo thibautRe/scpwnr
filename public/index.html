@@ -15,14 +15,13 @@
   <button class="form-square form-submit" type="submit">Convertir</button>
 </form>
 
-<span class="song-type js-song-type"></span>
-
 <!-- ko foreach: conversions -->
-  <div>
+  <div class="conversion">
     ID <span data-bind="text: id"></span>
     STATUS <span data-bind="text: status"></span>
   </div>
 <!-- /ko -->
+
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>
@@ -44,10 +43,6 @@
         return _conversions[i];
       }
     }
-  };
-
-  var message = function(mess) {
-    $('body').append('<div>' + mess + '</div>');
   };
 
   // Listen for the talk event.
@@ -72,11 +67,9 @@
     var url = getCleanedUrl(requestForm.serializeArray()[0].value);
 
     if (url === undefined) {
-      message('URL unrecognized');
+      // message('URL unrecognized');
       return false;
     }
-
-    $('.js-song-type').text(getUrlType(url));
 
     // Disable the form
     $('js-form--main input').attr('disabled', 'true');
