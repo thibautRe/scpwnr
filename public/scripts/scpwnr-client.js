@@ -33,6 +33,8 @@ var getCleanedUrl = function(url) {
     }
 };
 
+var module;
+
 // NodeJS related
 if (module && module.exports) {
     module.exports = {
