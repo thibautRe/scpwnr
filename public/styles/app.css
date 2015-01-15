@@ -134,3 +134,15 @@ h2 {
   font-size: .8em;
 }
 
+.conversion-track {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: .8em;
+
+}
+
+.conversion-track:hover {
+  text-decoration: underline;
+}

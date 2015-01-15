@@ -35,7 +35,23 @@
         <h3 class="conversion-info-title">Status</h3>
         <span class="conversion-info-desc" data-bind="text: status"></span>
       </div>
-      <!-- ko if: errorMsg -->
+
+      <!-- ko if: status() == 'finish' -->
+        <div class="conversion-info">
+          <h3 class="conversion-info-title">Tracks</h3>
+          <span class="conversion-info-desc" data-bind="text: tracks().length"></span>
+        </div>
+
+        <!-- ko foreach: tracks -->
+          <a class="conversion-track" data-bind="attr: {href: url}">
+            <span data-bind="text: artist"></span>
+            -
+            <span data-bind="text: title"></span>
+          </a>
+        <!-- /ko -->
+      <!-- /ko -->
+
+      <!-- ko if: status() == 'error' && errorMsg -->
       <div class="conversion-info">
         <h3 class="conversion-info-title">Error msg</h3>
         <span class="conversion-info-desc" data-bind="text: errorMsg"></span>
@@ -74,7 +90,7 @@
   io.on('conv-finish', function(data) {
     var conversion = findConversionById(data.id);
     conversion.status('finish');
-    console.log(data.tracks);
+    conversion.tracks(data.tracks);
   });
   io.on('conv-error', function(data) {
     var conversion = findConversionById(data.id);
