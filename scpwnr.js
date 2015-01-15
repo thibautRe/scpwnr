@@ -2,11 +2,15 @@ var casperModule = require('casper')
 var casperOptions = {
     verbose: true,
     logLevel: 'error',
-    colorizerType: 'Dummy'
+    colorizerType: 'Dummy',
+    pageSettings: {
+        webSecurityEnabled: false
+    }
 };
 
 // Create casper instance
 var casper = casperModule.create(casperOptions);
+casper.userAgent('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0');
 
 var captureFolder = 'captures';
 var musicFolder = 'music';
