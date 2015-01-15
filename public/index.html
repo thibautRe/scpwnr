@@ -74,6 +74,7 @@
   io.on('conv-finish', function(data) {
     var conversion = findConversionById(data.id);
     conversion.status('finish');
+    console.log(data.tracks);
   });
   io.on('conv-error', function(data) {
     var conversion = findConversionById(data.id);

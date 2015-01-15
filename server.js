@@ -8,7 +8,7 @@ app.use(express.static('public'));
 var conversionID = 0;
 
 var addToQueue = function(req, url, conversionID) {
-    exec('casperjs scpwnr.js --log-level=error ' + url, function(error, stdout, stderr) {
+    exec('casperjs scpwnr.js --log-level=error --format=server ' + url, function(error, stdout, stderr) {
         // Emit an error if conversion script fails
         if (error != null) {
             req.io.emit('conv-error', {
@@ -21,8 +21,29 @@ var addToQueue = function(req, url, conversionID) {
             return;
         }
 
+        var tracks = [];
+
+        // Go through all good lines in console output, to retrieve artist|title|url
+        var pattern = '(.+)\\|(.+)\\|(.+)'
+        var regex = new RegExp(pattern, 'gm');
+        var goodOutputLines = stdout.match(regex);
+        // Remove global for enabling "match" to give capturing groups
+        regex = new RegExp(pattern);
+        // Filling all tracks with good infos
+        console.log(goodOutputLines)
+        for (var i in goodOutputLines) {
+            var trackInfos = goodOutputLines[i].match(regex);
+            tracks.push({
+                artist: trackInfos[1],
+                title: trackInfos[2],
+                url: trackInfos[3]
+            });
+        }
+        console.log(tracks);
+
         req.io.emit('conv-finish', {
-            id: conversionID
+            id: conversionID,
+            tracks: tracks
         });
     });
 };

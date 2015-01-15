@@ -33,9 +33,9 @@ var getCleanedUrl = function(url) {
     }
 };
 
-var module;
 
 // NodeJS related
+var module;
 if (module && module.exports) {
     module.exports = {
         'getUrlType': getUrlType,

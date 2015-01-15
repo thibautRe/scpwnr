@@ -16,47 +16,16 @@ var captureFolder = 'captures';
 var musicFolder = 'music';
 
 var scpwnrClient = require('public/scripts/scpwnr-client.js');
+var Track = require('public/scripts/track.js');
+
+
 
 var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
 };
 
-var cleanMp3Name = function(mp3Name) {
-    // Change brackets to parenthesis
-    mp3Name = mp3Name.replace(/[\[\{]/, '(');
-    mp3Name = mp3Name.replace(/[\]\}]/, ')');
-
-    // Remove '/', '"'
-    mp3Name = mp3Name.replace(/\//g, '');
-    mp3Name = mp3Name.replace(/"/g, '');
-
-    // remove parenthesis for some useless shit
-    var parenthesisTerms = 'FREE|EDM\\.COM|OUT NOW|ORIGINAL MIX';
-    var regex = new RegExp('(\\([^\\)]*)?(?:'+parenthesisTerms+')([^\\(]*\\))?', 'ig');
-    mp3Name = mp3Name.replace(regex, '');
-
-    return mp3Name.trim();
-};
-
-var getMp3Name = function(title, artist) {
-    var name = artist + ' - ' + title;
-
-    // If the title is in the form 'artist - title'
-    // Test if there's already a separator in title.
-    var separators = ['-', '–', '\\|'];
-    var regex = '';
-    for (var i in separators) {
-        regex += '(?:\\s'+separators[i]+'\\s)';
-        if (i < separators.length - 1) {
-            regex += '|';
-        }
-    }
-    regex = new RegExp(regex);
-    if (regex.test(title)) {
-        name = title.replace(regex, ' - ');
-    }
-
-    return cleanMp3Name(name);
+var currentPwnr = {
+    songsDownloaded: []
 };
 
 var openTrack = function(pageUrl) {
@@ -114,20 +83,22 @@ var openTrack = function(pageUrl) {
 
                     // Download the mp3
                     this.then(function() {
+                        var newTrack = new Track(titleText, artistText, mp3Adress);
+
                         var pathToFile = '';
                         if (!albumText) {
-                            path = musicFolder + '/' + getMp3Name(titleText, artistText)+ '.mp3'
+                            path = musicFolder + '/' + newTrack.getMp3Name();
                         }
                         else {
-                            path = musicFolder + '/' + albumText + '/' + getMp3Name(titleText, artistText)+ '.mp3'
+                            path = musicFolder + '/' + albumText + '/' + newTrack.getMp3Name();
                         }
 
                         this.download(mp3Adress, path);
+                        currentPwnr.songsDownloaded.push(newTrack);
                     })
                 });
             }, function() {
                 this.die('No play button found at ' + pageUrl, 1);
-                return;
             }, 5000);
         });
     });
@@ -152,7 +123,6 @@ var openSet = function(setUrl) {
         for (var i in setLinks) {
             openTrack(setLinks[i]);
         }
-
     });
 };
 
@@ -199,6 +169,16 @@ var _open = function(url) {
     else if (type == 'user') {
         openUserlist(url);
     }
+
+    casper.then(function() {
+        if (casper.cli.options.format == 'server') {
+            for (var i in currentPwnr.songsDownloaded) {
+                var track = currentPwnr.songsDownloaded[i];
+                var trackInfos = track.getCleanInfos();
+                console.log(trackInfos.artist + '|' + trackInfos.title + '|' + track.url);
+            }
+        }
+    });
 };
 
 
