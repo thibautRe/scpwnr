@@ -168,15 +168,6 @@ var _open = function(url) {
         openUserlist(url);
     }
 
-    casper.then(function() {
-        if (casper.cli.options.format == 'server') {
-            for (var i in currentPwnr.songsDownloaded) {
-                var track = currentPwnr.songsDownloaded[i];
-                var trackInfos = track.getCleanInfos();
-                console.log(trackInfos.artist + '|' + trackInfos.title + '|' + track.url);
-            }
-        }
-    });
 };
 
 
@@ -184,6 +175,15 @@ casper.start();
 
 // Open all the arguments in command line
 _open(scpwnrClient.getCleanedUrl(casper.cli.args[0]));
+casper.then(function() {
+    if (casper.cli.options.format == 'server') {
+        for (var i in currentPwnr.songsDownloaded) {
+            var track = currentPwnr.songsDownloaded[i];
+            var trackInfos = track.getCleanInfos();
+            console.log(trackInfos.artist + '|' + trackInfos.title + '|' + track.url);
+        }
+    }
+});
 
 if (!casper.cli.args.length) {
     casper.log('No arguments given !', 'error');
