@@ -52,18 +52,15 @@ var openTrack = function(pageUrl) {
             });
 
             // Click on the play button
-            this.waitForSelector('.heroPlayButton', function() {
-                this.click('.heroPlayButton');
+            var selector = '.soundTitle.single';
+            this.waitForSelector(selector, function() {
+                this.click(selector + ' button');
 
                 // Retrieve the MP3 informations
                 // Retrive the title
-                if (this.exists('.soundTitle__titleHero')) {
-                    titleText = this.getElementInfo('.soundTitle__titleHero').text.trim();
-                }
+                titleText = this.getElementInfo(selector + ' .soundTitle__title').text.trim();
                 // Retrieve the artist
-                if (this.exists('.soundTitle__usernameHero')) {
-                    artistText = this.getElementInfo('.soundTitle__usernameHero').text.trim();
-                }       
+                artistText = this.getElementInfo(selector + ' .soundTitle__username').text.trim();
 
                 // Open the stream MP3 address
                 if (streamMp3Address == '') {
@@ -98,8 +95,9 @@ var openTrack = function(pageUrl) {
                     })
                 });
             }, function() {
+                this.capture(captureFolder + '/' +  pageUrl.replace(/\//g, '-') + '.png');
                 this.die('No play button found at ' + pageUrl, 1);
-            }, 5000);
+            }, 2000);
         });
     });
 };
