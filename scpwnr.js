@@ -83,53 +83,52 @@ var openTrack = function(pageUrl) {
             });
 
             // Click on the play button
-            this.wait(1000);
-            if (!this.exists('.heroPlayButton')) {
-                this.capture(captureFolder + '/' +  pageUrl.replace(/\//g, '-') + '.png');
+            this.waitForSelector('.heroPlayButton', function() {
+                this.click('.heroPlayButton');
+
+                // Retrieve the MP3 informations
+                // Retrive the title
+                if (this.exists('.soundTitle__titleHero')) {
+                    titleText = this.getElementInfo('.soundTitle__titleHero').text.trim();
+                }
+                // Retrieve the artist
+                if (this.exists('.soundTitle__usernameHero')) {
+                    artistText = this.getElementInfo('.soundTitle__usernameHero').text.trim();
+                }       
+
+                // Open the stream MP3 address
+                if (streamMp3Address == '') {
+                    this.die('No stream found', 1);
+                }
+                this.thenOpen(streamMp3Address, {
+                    method: 'get',
+                    headers: {
+                        "Accept": "application/json, text/javascript, */*; q=0.01"
+                    }
+                }, function() {
+
+                    // Get the MP3 address
+                    mp3Adress = JSON.parse(this.getPageContent()).http_mp3_128_url;
+                    this.log('*** Mp3 adress: GOTCHA', 'info');
+                    this.log('*** Mp3 adress: ' + mp3Adress, 'info');
+
+                    // Download the mp3
+                    this.then(function() {
+                        var pathToFile = '';
+                        if (!albumText) {
+                            path = musicFolder + '/' + getMp3Name(titleText, artistText)+ '.mp3'
+                        }
+                        else {
+                            path = musicFolder + '/' + albumText + '/' + getMp3Name(titleText, artistText)+ '.mp3'
+                        }
+
+                        this.download(mp3Adress, path);
+                    })
+                });
+            }, function() {
                 this.die('No play button found at ' + pageUrl, 1);
                 return;
-            }
-            this.click('.heroPlayButton');
-
-            // Retrieve the MP3 informations
-            // Retrive the title
-            if (this.exists('.soundTitle__titleHero')) {
-                titleText = this.getElementInfo('.soundTitle__titleHero').text.trim();
-            }
-            // Retrieve the artist
-            if (this.exists('.soundTitle__usernameHero')) {
-                artistText = this.getElementInfo('.soundTitle__usernameHero').text.trim();
-            }       
-
-            // Open the stream MP3 address
-            if (streamMp3Address == '') {
-                this.die('No stream found', 1);
-            }
-            this.thenOpen(streamMp3Address, {
-                method: 'get',
-                headers: {
-                    "Accept": "application/json, text/javascript, */*; q=0.01"
-                }
-            }, function() {
-
-                // Get the MP3 address
-                mp3Adress = JSON.parse(this.getPageContent()).http_mp3_128_url;
-                this.log('*** Mp3 adress: GOTCHA', 'info');
-                this.log('*** Mp3 adress: ' + mp3Adress, 'info');
-
-                // Download the mp3
-                this.then(function() {
-                    var pathToFile = '';
-                    if (!albumText) {
-                        path = musicFolder + '/' + getMp3Name(titleText, artistText)+ '.mp3'
-                    }
-                    else {
-                        path = musicFolder + '/' + albumText + '/' + getMp3Name(titleText, artistText)+ '.mp3'
-                    }
-
-                    this.download(mp3Adress, path);
-                })
-            });
+            }, 5000);
         });
     });
 };
