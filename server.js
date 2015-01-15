@@ -30,7 +30,6 @@ var addToQueue = function(req, url, conversionID) {
         // Remove global for enabling "match" to give capturing groups
         regex = new RegExp(pattern);
         // Filling all tracks with good infos
-        console.log(goodOutputLines)
         for (var i in goodOutputLines) {
             var trackInfos = goodOutputLines[i].match(regex);
             tracks.push({
@@ -39,7 +38,6 @@ var addToQueue = function(req, url, conversionID) {
                 url: trackInfos[3]
             });
         }
-        console.log(tracks);
 
         req.io.emit('conv-finish', {
             id: conversionID,
