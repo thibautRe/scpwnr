@@ -3,7 +3,7 @@ var Conversion = function(id) {
     this.status = ko.observable();
     this.url = ko.observable();
     this.errorMsg = ko.observable();
-    this.isExpanded = ko.observable(false);
+    this.isExpanded = ko.observable(true);
     this.tracks = ko.observableArray();
 };
 
