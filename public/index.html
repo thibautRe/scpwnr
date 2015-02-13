@@ -11,7 +11,7 @@
 <h2>Soundcloud's home-made, powerful, and fresh Pwnr.</h2>
 
 <form class="form--main js-form--main" action="/song">
-  <input class="form-square form-url" name="url"/>
+  <input class="form-square form-url" name="url" data-bind="value: trackUrl"/>
   <button class="form-square form-submit" type="submit">Convertir</button>
 </form>
 
@@ -70,6 +70,7 @@
 <script>
   var io = io.connect();
   var conversions = ko.observableArray([]);
+  var trackUrl = ko.observable('');
 
   var findConversionById = function(id) {
     var _conversions = conversions();
@@ -102,7 +103,8 @@
 
   // on submit
   requestForm.submit(function() {
-    var url = getCleanedUrl(requestForm.serializeArray()[0].value);
+    var url = getCleanedUrl(trackUrl());
+    trackUrl('');
 
     if (url === undefined) {
       // message('URL unrecognized');
@@ -122,6 +124,7 @@
 
   ko.applyBindings({
     conversions: conversions,
+    trackUrl: trackUrl,
     getStyleFromStatus: function(status) {
       if (status() == 'finish') {
         return {'background-color': 'rgba(20,240,20,.1)'}
