@@ -63,7 +63,10 @@ Track.prototype._cleanString = function(string) {
     var regex = new RegExp('(\\([^\\)]*)?(?:'+parenthesisTerms+')([^\\(]*\\))?', 'ig');
     string = string.replace(regex, '');
 
-    return string.trim();
+    // Remove whitespaces
+    string = string.replace(/\s+/g, ' ');
+
+    return string;
 };
 
 // NodeJS related
