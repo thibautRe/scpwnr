@@ -52,15 +52,17 @@ var openTrack = function(pageUrl) {
             });
 
             // Click on the play button
-            var selector = '.soundTitle.single';
-            this.waitForSelector(selector, function() {
-                this.click(selector + ' button');
+            var selectors = ['.soundTitle.single', '.soundTitle.soundTitle_hero'];
+            this.waitForSelector(selectors.join(','), function() {
+                this.click(selectors.map(function(value) {
+                	return value + ' button';
+                }).join(','));
 
                 // Retrieve the MP3 informations
                 // Retrive the title
-                titleText = this.getElementInfo(selector + ' .soundTitle__title').text.trim();
+                titleText = this.getElementInfo(selectors + ' .soundTitle__title').text.trim();
                 // Retrieve the artist
-                artistText = this.getElementInfo(selector + ' .soundTitle__username').text.trim();
+                artistText = this.getElementInfo(selectors + ' .soundTitle__username').text.trim();
 
                 // Open the stream MP3 address
                 if (streamMp3Address == '') {
