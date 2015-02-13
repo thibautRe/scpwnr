@@ -84,7 +84,7 @@
   // Listen for the talk event.
   io.on('conv-begin', function(data) {
     var newConversion = new Conversion(data.id);
-    conversions.push(newConversion);
+    conversions.unshift(newConversion);
     newConversion.status('pending');
     newConversion.url(data.url);
   });
