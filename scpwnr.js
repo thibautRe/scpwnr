@@ -54,15 +54,24 @@ var openTrack = function(pageUrl) {
             // Click on the play button
             var selectors = ['.soundTitle.single', '.soundTitle.soundTitle_hero'];
             this.waitForSelector(selectors.join(','), function() {
-                this.click(selectors.map(function(value) {
-                	return value + ' button';
-                }).join(','));
+
+                // Retrieve true parent selector
+                var parentSelector = '';
+                for (var i in selectors) {
+                    if (this.exists(selectors[i])) {
+                        parentSelector = selectors[i];
+                        break;
+                    }
+                }
+
+                // Click on the button
+                this.click(parentSelector + ' button');
 
                 // Retrieve the MP3 informations
                 // Retrive the title
-                titleText = this.getElementInfo(selectors + ' .soundTitle__title').text.trim();
+                titleText = this.getElementInfo(parentSelector + ' .soundTitle__title').text.trim();
                 // Retrieve the artist
-                artistText = this.getElementInfo(selectors + ' .soundTitle__username').text.trim();
+                artistText = this.getElementInfo(parentSelector + ' .soundTitle__username').text.trim();
 
                 // Open the stream MP3 address
                 if (streamMp3Address == '') {
