@@ -4,3 +4,5 @@ node_modules/
 *.sublime-project
 *.sublime-workspace
 public/vendor/
+launcher.bat
+*.log

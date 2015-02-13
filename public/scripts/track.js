@@ -53,9 +53,10 @@ Track.prototype._cleanString = function(string) {
     string = string.replace(/[\[\{]/, '(');
     string = string.replace(/[\]\}]/, ')');
 
-    // Remove '/', '"'
+    // Remove '/', '"', "*"
     string = string.replace(/\//g, '');
     string = string.replace(/"/g, '');
+    string = string.replace(/\*/g, '');
 
     // remove parenthesis for some useless shit
     var parenthesisTerms = 'FREE|EDM\\.COM|OUT NOW|ORIGINAL MIX';
