@@ -6,9 +6,12 @@ Soundcloud Pwnr*. Helper to download songs from [Soundcloud](http://soundcloud.c
 ## Features
 
 - Downloads and saves songs from Soundcloud on your local computer
+- Can download and entire set or artist tracklist
 - Intelligent parsing of artist and title
 - User-friendly web interface
 
+The downloaded music is saved in ./music folder. Make sure SCPWN* has
+the correct access rights to write here.
 
 ## Installation
 
@@ -29,7 +32,7 @@ casperjs scpwnr.js (options)
 Where options are the Soundcloud URL you want to pwn. It can be :
 - A track URL
 - A Set URL
-- A Profile URL (unstable)
+- A Profile URL
 
 
 ### User-friendly web interface
