@@ -18,8 +18,6 @@ var musicFolder = 'music';
 var scpwnrClient = require('public/scripts/scpwnr-client.js');
 var Track = require('public/scripts/track.js');
 
-
-
 var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
 };
@@ -106,7 +104,7 @@ var openTrack = function(pageUrl) {
                     })
                 });
             }, function() {
-                this.capture(captureFolder + '/' +  pageUrl.replace(/\//g, '-') + '.png');
+                this.capture(captureFolder + '/' +  pageUrl.replace(/[\/:]/g, '-') + '.png');
                 this.die('No play button found at ' + pageUrl, 1);
             }, 2000);
         });
