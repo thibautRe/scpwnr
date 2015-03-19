@@ -131,7 +131,12 @@ h2 {
 }
 
 .conversion-info-desc {
+  color: inherit;
+  text-decoration: none;
   font-size: .8em;
+}
+.conversion-info-desc:hover {
+  text-decoration: underline;
 }
 
 .conversion-track {
@@ -140,7 +145,6 @@ h2 {
   text-decoration: none;
   margin-left: 20px;
   font-size: .8em;
-
 }
 
 .conversion-track:hover {
