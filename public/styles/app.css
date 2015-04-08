@@ -139,6 +139,12 @@ h2 {
   text-decoration: underline;
 }
 
+.conversion-cover {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+}
+
 .conversion-track {
   display: block;
   color: inherit;

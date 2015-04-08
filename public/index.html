@@ -44,6 +44,7 @@
 
         <!-- ko foreach: tracks -->
           <a class="conversion-track" data-bind="attr: {href: url}">
+            <img data-bind="attr: {src: coverUrl}" class="conversion-cover">
             <span data-bind="text: scArtist"></span>
             -
             <span data-bind="text: scTitle"></span>
