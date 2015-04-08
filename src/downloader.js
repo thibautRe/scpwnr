@@ -1,6 +1,7 @@
 var https = require('https');
 var fs = require('fs');
 var url = require('url');
+var ffmetadata = require("ffmetadata");
 
 var Downloader = function() {};
 
@@ -9,7 +10,13 @@ Downloader.prototype.download = function(track) {
     var downloader = this;
     downloader._downloadMp3(track, function() {
         downloader._downloadCover(track, function() {
-            console.log("allDownloaded");
+            var options = {
+                attachments: [track.getName() + ".jpg"]
+            };
+            
+            ffmetadata.write(track.getName() + ".mp3", {}, options, function(err) {
+                if (err) console.log("Error writing cover art");
+            });
         });
     });
 };
