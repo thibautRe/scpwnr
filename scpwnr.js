@@ -98,20 +98,23 @@ var openTrack = function(pageUrl) {
 
                     // Download the mp3
                     this.then(function() {
-                        var newTrack = new Track(titleText, artistText, mp3Adress);
+                        var newTrack = new Track(titleText, artistText, mp3Adress, coverUrl);
 
-                        var pathToFile = '';
+                        var mp3PathToFile = '';
+                        var coverPathToFile = '';
                         if (!albumText) {
-                            path = musicFolder + '/' + newTrack.getMp3Name();
+                            mp3PathToFile = musicFolder + '/' + newTrack.getMp3Name();
+                            coverPathToFile = musicFolder + '/' + newTrack.getCoverName();
                         }
                         else {
-                            path = musicFolder + '/' + albumText + '/' + newTrack.getMp3Name();
+                            mp3PathToFile = musicFolder + '/' + albumText + '/' + newTrack.getMp3Name();
+                            coverPathToFile = musicFolder + '/' + albumText + '/' + newTrack.getCoverName();
                         }
 
                         // Download the mp3
-                        this.download(mp3Adress, path);
+                        this.download(mp3Adress, mp3PathToFile);
                         // Download the cover
-                        this.download(coverUrl, path + '.jpg');
+                        this.download(coverUrl, coverPathToFile);
                         currentPwnr.songsDownloaded.push(newTrack);
                     })
                 });

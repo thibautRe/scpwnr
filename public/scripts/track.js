@@ -1,7 +1,8 @@
-var Track = function(scTitle, scArtist, url) {
+var Track = function(scTitle, scArtist, url, coverUrl) {
     this.scTitle = scTitle;
     this.scArtist = scArtist;
     this.url = url;
+    this.coverUrl = coverUrl;
 };
 
 // Track.getCleanInfos()
@@ -45,6 +46,11 @@ Track.prototype.getCleanInfos = function() {
 Track.prototype.getMp3Name = function() {
     var cleanInfos = this.getCleanInfos();
     return cleanInfos['artist'] + ' - ' + cleanInfos['title'] + '.mp3';
+};
+
+// Return the jpg name of the cover
+Track.prototype.getCoverName = function() {
+    return this.getMp3Name() + '.jpg';
 };
 
 // Clean a string, removing useless stuff
