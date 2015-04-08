@@ -2,6 +2,7 @@ var express = require('express.io');
 var app = express();
 var exec = require('child_process').exec;
 var downloader = require('./src/downloader');
+var Track = require('./public/scripts/track.js');
 
 app.http().io();
 app.use(express.static('public'));
@@ -33,14 +34,10 @@ var addToQueue = function(req, url, conversionID) {
         // Filling all tracks with good infos
         for (var i in goodOutputLines) {
             var trackInfos = goodOutputLines[i].match(regex);
-            tracks.push({
-                scArtist: trackInfos[1],
-                scTitle: trackInfos[2],
-                url: trackInfos[3],
-                coverUrl: trackInfos[4]
-            });
+            var newTrack = new Track(trackInfos[1], trackInfos[2], trackInfos[3], trackInfos[4]);
+            tracks.push(newTrack);
 
-            downloader._download(trackInfos[3], 'title.mp3', function() {
+            downloader.download(newTrack, 'title.mp3', function() {
                 console.log('download over');
             });
         }

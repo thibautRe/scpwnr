@@ -187,7 +187,7 @@ casper.then(function() {
     if (casper.cli.options.format == 'server') {
         for (var i in currentPwnr) {
             var track = currentPwnr[i];
-            console.log(track.scArtist + '|' + track.scTitle + '|' + track.url + '|' + track.coverUrl);
+            console.log(track.scTitle + '|' + track.scArtist + '|' + track.url + '|' + track.coverUrl);
         }
     }
 });
