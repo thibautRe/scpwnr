@@ -8,20 +8,24 @@ var Downloader = function() {
 
 // Downloads track (MP3 + cover)
 Downloader.prototype.download = function(track) {
-    this._downloadMp3(track);
-    this._downloadCover(track);
+    var downloader = this;
+    downloader._downloadMp3(track, function() {
+        downloader._downloadCover(track, function() {
+            console.log("allDownloaded");
+        });
+    });
 };
 
 // @TODO
 // Downloads MP3
-Downloader.prototype._downloadMp3 = function(track) {
-
+Downloader.prototype._downloadMp3 = function(track, callback) {
+    this._download(track.url, track.getName() + ".mp3", callback);
 };
 
 // @TODO
 // Downloads cover
-Downloader.prototype._downloadCover = function(track) {
-
+Downloader.prototype._downloadCover = function(track, callback) {
+    this._download(track.coverUrl, track.getName() + ".jpg", callback);
 };
 
 // Downloads a file using HTTPS.get
