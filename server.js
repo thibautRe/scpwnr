@@ -1,6 +1,7 @@
 var express = require('express.io');
 var app = express();
 var exec = require('child_process').exec;
+var downloader = require('./src/downloader');
 
 app.http().io();
 app.use(express.static('public'));
@@ -37,6 +38,10 @@ var addToQueue = function(req, url, conversionID) {
                 scTitle: trackInfos[2],
                 url: trackInfos[3],
                 coverUrl: trackInfos[4]
+            });
+
+            downloader._download(trackInfos[3], 'title.mp3', function() {
+                console.log('download over');
             });
         }
 
