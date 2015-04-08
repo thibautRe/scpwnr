@@ -1,21 +1,28 @@
 var https = require('https');
 var fs = require('fs');
 var url = require('url');
-var ffmetadata = require("ffmetadata");
+var path = require('path');
+var ffmetadata = require('ffmetadata');
 
-var Downloader = function() {};
+var Downloader = function(baseDirectory) {
+    if (baseDirectory === undefined) baseDirectory = "";
+    this.baseDirectory = baseDirectory;
+};
 
 // Downloads track (MP3 + cover)
-Downloader.prototype.download = function(track) {
+Downloader.prototype.download = function(track, callback) {
     var downloader = this;
     downloader._downloadMp3(track, function() {
         downloader._downloadCover(track, function() {
             var options = {
-                attachments: [track.getName() + ".jpg"]
+                attachments: [path.join(downloader.baseDirectory, track.getName() + '.jpg')]
             };
-            
-            ffmetadata.write(track.getName() + ".mp3", {}, options, function(err) {
-                if (err) console.log("Error writing cover art");
+
+            ffmetadata.write(path.join(downloader.baseDirectory, track.getName() + '.mp3'), {}, options, function(err) {
+                if (err) console.log('Error writing cover art');
+                else if (callback) {
+                    callback();
+                }
             });
         });
     });
@@ -23,12 +30,12 @@ Downloader.prototype.download = function(track) {
 
 // Downloads MP3
 Downloader.prototype._downloadMp3 = function(track, callback) {
-    this._download(track.url, track.getName() + ".mp3", callback);
+    this._download(track.url, path.join(this.baseDirectory, track.getName() + '.mp3'), callback);
 };
 
 // Downloads cover
 Downloader.prototype._downloadCover = function(track, callback) {
-    this._download(track.coverUrl, track.getName() + ".jpg", callback);
+    this._download(track.coverUrl, path.join(this.baseDirectory, track.getName() + '.jpg'), callback);
 };
 
 // Downloads a file using HTTPS.get
@@ -48,6 +55,6 @@ Downloader.prototype._download = function(file_url, path, callback) {
 // NodeJS related
 var module;
 if (module && module.exports) {
-    module.exports = new Downloader();
+    module.exports = Downloader;
 }
 

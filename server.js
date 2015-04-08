@@ -1,13 +1,14 @@
 var express = require('express.io');
 var app = express();
 var exec = require('child_process').exec;
-var downloader = require('./src/downloader');
+var Downloader = require('./src/downloader');
 var Track = require('./public/scripts/track.js');
 
 app.http().io();
 app.use(express.static('public'));
 
 var conversionID = 0;
+var downloader = new Downloader("music");
 
 var addToQueue = function(req, url, conversionID) {
     exec('casperjs scpwnr.js --log-level=error --format=server ' + url, function(error, stdout, stderr) {
@@ -37,7 +38,7 @@ var addToQueue = function(req, url, conversionID) {
             var newTrack = new Track(trackInfos[1], trackInfos[2], trackInfos[3], trackInfos[4]);
             tracks.push(newTrack);
 
-            downloader.download(newTrack, 'title.mp3', function() {
+            downloader.download(newTrack, function() {
                 console.log('download over');
             });
         }
