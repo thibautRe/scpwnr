@@ -75,6 +75,15 @@ var openTrack = function(pageUrl) {
                 if (streamMp3Address == '') {
                     this.die('No stream found', 1);
                 }
+
+                // Retrieve cover Art
+                var coverSelector = ".fullListenHero__artwork span.sc-artwork";
+                // Retrieve cover style attr
+                var coverStyle = this.getElementAttribute(coverSelector, 'style');
+                // Retrieve cover url
+                var coverUrl = /background(?:-\w*)?:\surl\((.*\.jpg)\)/g.exec(coverStyle)[1];
+
+                // Retrieve MP3 Stream Addresses
                 this.thenOpen(streamMp3Address, {
                     method: 'get',
                     headers: {
@@ -99,7 +108,10 @@ var openTrack = function(pageUrl) {
                             path = musicFolder + '/' + albumText + '/' + newTrack.getMp3Name();
                         }
 
+                        // Download the mp3
                         this.download(mp3Adress, path);
+                        // Download the cover
+                        this.download(coverUrl, path + '.jpg');
                         currentPwnr.songsDownloaded.push(newTrack);
                     })
                 });
