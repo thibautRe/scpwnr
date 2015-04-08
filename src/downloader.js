@@ -2,9 +2,7 @@ var https = require('https');
 var fs = require('fs');
 var url = require('url');
 
-var Downloader = function() {
-
-};
+var Downloader = function() {};
 
 // Downloads track (MP3 + cover)
 Downloader.prototype.download = function(track) {
@@ -16,13 +14,11 @@ Downloader.prototype.download = function(track) {
     });
 };
 
-// @TODO
 // Downloads MP3
 Downloader.prototype._downloadMp3 = function(track, callback) {
     this._download(track.url, track.getName() + ".mp3", callback);
 };
 
-// @TODO
 // Downloads cover
 Downloader.prototype._downloadCover = function(track, callback) {
     this._download(track.coverUrl, track.getName() + ".jpg", callback);
