@@ -42,10 +42,10 @@ Track.prototype.getCleanInfos = function() {
     }
 };
 
-// Return the mp3 name of the track
-Track.prototype.getMp3Name = function() {
+// Return the name of the track (used for file names)
+Track.prototype.getName = function() {
     var cleanInfos = this.getCleanInfos();
-    return cleanInfos['artist'] + ' - ' + cleanInfos['title'] + '.mp3';
+    return cleanInfos['artist'] + ' - ' + cleanInfos['title'];
 };
 
 // Return the jpg name of the cover
