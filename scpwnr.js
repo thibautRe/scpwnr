@@ -76,7 +76,7 @@ var openTrack = function(pageUrl) {
                 }
 
                 // Retrieve cover Art
-                var coverSelector = ".fullListenHero__artwork span.sc-artwork";
+                var coverSelector = ".fullListenHero__artwork span.sc-artwork, .listenInfo span.sc-artwork";
                 // Retrieve cover style attr
                 var coverStyle = this.getElementAttribute(coverSelector, 'style');
                 // Retrieve cover url
