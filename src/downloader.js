@@ -50,7 +50,7 @@ Downloader.prototype._download = function(file_url, path, callback, progressCall
             file.write(data);
             contentDownloaded += data.length;
             if (progressCallback) {
-                progressCallback(contentDownloaded/contentLength);
+                progressCallback(contentDownloaded*100/contentLength);
             }
         }).on('end', function() {
             file.end();

@@ -156,3 +156,18 @@ h2 {
 .conversion-track:hover {
   text-decoration: underline;
 }
+
+.track-progress {
+  display: inline-block;
+  width: 200px;
+  height: 15px;
+  vertical-align: middle;
+  background-color: gray;
+}
+
+.track-progress-percent {
+  display: inline-block;
+  height: 100%;
+  background-color: green;
+  
+}

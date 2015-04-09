@@ -49,8 +49,9 @@
             -
             <span data-bind="text: scTitle"></span>
             |
-            <span data-bind="text: downloadStatus"></span>
-            <span data-bind="text: downloadProgress"></span>
+            <span class="track-progress">
+              <span class="track-progress-percent" data-bind="style: {width: downloadProgress() + '%'}"></span>
+            </span>
           </a>
         <!-- /ko -->
       <!-- /ko -->
