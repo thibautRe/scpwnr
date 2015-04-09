@@ -16,7 +16,7 @@
 </form>
 
 <!-- ko foreach: conversions -->
-  <div class="conversion" data-bind="style: $root.getStyleFromStatus(status)">
+  <div class="conversion" data-bind="css: {'conversion--finish': isFinished()}">
     <button class="conversion-delete" data-bind="click: function() {$root.deleteConversion($data)}">&times;</button>
     <!-- ko ifnot: isExpanded -->
       <button class="conversion-seemore" data-bind="click: expand">Voir plus </button>
@@ -145,14 +145,6 @@
   ko.applyBindings({
     conversions: conversions,
     trackUrl: trackUrl,
-    getStyleFromStatus: function(status) {
-      if (status() == 'finish') {
-        return {'background-color': 'rgba(20,240,20,.1)'}
-      }
-      else if (status() == 'error') {
-        return {'background-color': 'rgba(240,20,20,.1)'}
-      }
-    },
     deleteConversion: function(conversion) {
       conversions.remove(conversion);
     }

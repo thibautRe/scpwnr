@@ -72,7 +72,7 @@ h2 {
 /* Conversion */
 .conversion {
   position: relative;
-  background-color: rgba(150,150,160,.15);
+  background-color: rgba(255,255,255,.20);
   padding: 10px;
   padding-right: 50px;
   width: 80%;
@@ -87,6 +87,10 @@ h2 {
 
   transition: .2s background-color;
   -webkit-transition: .2s background-color;
+}
+
+.conversion--finish {
+  background-color: rgba(112, 225, 245, 0.24);
 }
 
 .conversion-seemore {
