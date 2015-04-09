@@ -45,11 +45,8 @@
         <!-- ko foreach: tracks -->
           <a class="conversion-track" data-bind="attr: {href: url}">
             <img data-bind="attr: {src: coverUrl}" class="conversion-cover">
-            <span data-bind="text: scArtist"></span>
-            -
-            <span data-bind="text: scTitle"></span>
-            |
-            <span class="track-progress">
+            <span class="track-name" data-bind="text: getName()"></span>
+            <span class="track-progress" data-bind="css: {'track-progress--finish': downloadStatus()=='downloaded'}">
               <span class="track-progress-percent" data-bind="style: {width: downloadProgress() + '%'}"></span>
             </span>
           </a>
@@ -111,15 +108,15 @@
     conversion.status('error');
     conversion.errorMsg(data.consoleMsg.stdout);
   });
-  io.on('down-finish', function(data) {
-    var conversion = findConversionById(data.id);
-    var track = conversion.findTrackByName(data.name);
-    track.downloadStatus('downloaded');
-  });
   io.on('down-progress', function(data) {
     var conversion = findConversionById(data.id);
     var track = conversion.findTrackByName(data.name);
     track.downloadProgress(data.progress);
+  });
+  io.on('down-finish', function(data) {
+    var conversion = findConversionById(data.id);
+    var track = conversion.findTrackByName(data.name);
+    track.downloadStatus('downloaded');
   });
 
   var requestForm = $('.js-form--main');
