@@ -209,3 +209,7 @@ h2 {
 .track-progress--finish .track-progress-percent{
   background-color: rgb(112, 225, 245);
 }
+
+.track-progress--error .track-progress-percent {
+  display: none;
+}
