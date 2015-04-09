@@ -66,9 +66,11 @@ Track.prototype.getName = function() {
     return cleanInfos['artist'] + ' - ' + cleanInfos['title'];
 };
 
-// Return the jpg name of the cover
-Track.prototype.getCoverName = function() {
-    return this.getMp3Name() + '.jpg';
+// Return getName() method with only letters and digits
+Track.prototype.getFilefriendlyName = function() {
+    var name = this.getName();
+    var reg = /[^A-Za-z0-9 \-]/g;
+    return name.replace(reg, "");
 };
 
 // Clean a string, removing useless stuff

@@ -25,14 +25,14 @@ Downloader.prototype.download = function(track, conversionID, req) {
     downloader._downloadMp3(track, function() {
         downloader._downloadCover(track, function() {
             var options = {
-                attachments: [path.join(downloader.baseDirectory, track.getName() + '.jpg')]
+                attachments: [path.join(downloader.baseDirectory, track.getFilefriendlyName() + '.jpg')]
             };
 
             ffmetadata.write(path.join(downloader.baseDirectory, track.getName() + '.mp3'), {}, options, function(err) {
                 if (err) console.log('Error writing cover art : ' + track.getName());
 
                 // Remove the cover-art file
-                fs.unlink(path.join(downloader.baseDirectory, track.getName() + '.jpg'));
+                fs.unlink(path.join(downloader.baseDirectory, track.getFilefriendlyName() + '.jpg'));
 
                 // Download is finished
                 req.io.emit('down-finish', {
@@ -57,7 +57,7 @@ Downloader.prototype._downloadMp3 = function(track, callback, progressCallback) 
 
 // Downloads cover
 Downloader.prototype._downloadCover = function(track, callback) {
-    this._download(track.coverUrl, path.join(this.baseDirectory, track.getName() + '.jpg'), callback);
+    this._download(track.coverUrl, path.join(this.baseDirectory, track.getFilefriendlyName() + '.jpg'), callback);
 };
 
 // Downloads a file using HTTPS.get
