@@ -19,8 +19,12 @@ Downloader.prototype.download = function(track, callback, progressCallback) {
             };
 
             ffmetadata.write(path.join(downloader.baseDirectory, track.getName() + '.mp3'), {}, options, function(err) {
-                if (err) console.log('Error writing cover art');
-                else if (callback) {
+                if (err) console.log('Error writing cover art : ' + track.getName());
+
+                // Remove the cover-art file
+                fs.unlink(path.join(downloader.baseDirectory, track.getName() + '.jpg'));
+
+                if (callback) {
                     callback(track);
                 }
             });
