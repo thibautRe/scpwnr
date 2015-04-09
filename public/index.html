@@ -48,6 +48,9 @@
             <span data-bind="text: scArtist"></span>
             -
             <span data-bind="text: scTitle"></span>
+            |
+            <span data-bind="text: downloadStatus"></span>
+            <span data-bind="text: downloadProgress"></span>
           </a>
         <!-- /ko -->
       <!-- /ko -->
@@ -67,6 +70,7 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>
 <script type="text/javascript" src="/scripts/scpwnr-client.js"></script>
 <script type="text/javascript" src="/scripts/conversion.js"></script>
+<script type="text/javascript" src="/scripts/track.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var io = io.connect();
@@ -92,12 +96,29 @@
   io.on('conv-finish', function(data) {
     var conversion = findConversionById(data.id);
     conversion.status('finish');
-    conversion.tracks(data.tracks);
+
+    // Make Track objects
+    var bufferTracks = [];
+    for (var i in data.tracks) {
+      var newTrack = new Track(data.tracks[i]);
+      bufferTracks.push(newTrack);
+    }
+    conversion.tracks(bufferTracks);
   });
   io.on('conv-error', function(data) {
     var conversion = findConversionById(data.id);
     conversion.status('error');
     conversion.errorMsg(data.consoleMsg.stdout);
+  });
+  io.on('down-finish', function(data) {
+    var conversion = findConversionById(data.id);
+    var track = conversion.findTrackByName(data.name);
+    track.downloadStatus('downloaded');
+  });
+  io.on('down-progress', function(data) {
+    var conversion = findConversionById(data.id);
+    var track = conversion.findTrackByName(data.name);
+    track.downloadProgress(data.progress);
   });
 
   var requestForm = $('.js-form--main');

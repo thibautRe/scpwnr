@@ -1,8 +1,26 @@
+var ko;
+
 var Track = function(scTitle, scArtist, url, coverUrl) {
-    this.scTitle = scTitle;
-    this.scArtist = scArtist;
-    this.url = url;
-    this.coverUrl = coverUrl;
+    if (typeof scTitle == 'object') {
+        this.scTitle = scTitle.scTitle;
+        this.scArtist = scTitle.scArtist;
+        this.url = scTitle.url;
+        this.coverUrl = scTitle.coverUrl;
+    }
+    else {
+        this.scTitle = scTitle;
+        this.scArtist = scArtist;
+        this.url = url;
+        this.coverUrl = coverUrl;
+    }
+
+    // knockout-related observables & computeds
+    if (ko && ko.observable) {
+        // not-downloaded, downloading, downloaded
+        this.downloadStatus = ko.observable('not-downloaded');
+        // 0 - 100
+        this.downloadProgress = ko.observable(0);
+    }
 };
 
 // Track.getCleanInfos()

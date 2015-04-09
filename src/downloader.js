@@ -10,7 +10,7 @@ var Downloader = function(baseDirectory) {
 };
 
 // Downloads track (MP3 + cover)
-Downloader.prototype.download = function(track, callback) {
+Downloader.prototype.download = function(track, callback, progressCallback) {
     var downloader = this;
     downloader._downloadMp3(track, function() {
         downloader._downloadCover(track, function() {
@@ -21,16 +21,18 @@ Downloader.prototype.download = function(track, callback) {
             ffmetadata.write(path.join(downloader.baseDirectory, track.getName() + '.mp3'), {}, options, function(err) {
                 if (err) console.log('Error writing cover art');
                 else if (callback) {
-                    callback();
+                    callback(track);
                 }
             });
         });
+    }, function(progress) {
+        progressCallback(track, progress);
     });
 };
 
 // Downloads MP3
-Downloader.prototype._downloadMp3 = function(track, callback) {
-    this._download(track.url, path.join(this.baseDirectory, track.getName() + '.mp3'), callback);
+Downloader.prototype._downloadMp3 = function(track, callback, progressCallback) {
+    this._download(track.url, path.join(this.baseDirectory, track.getName() + '.mp3'), callback, progressCallback);
 };
 
 // Downloads cover
@@ -39,17 +41,24 @@ Downloader.prototype._downloadCover = function(track, callback) {
 };
 
 // Downloads a file using HTTPS.get
-Downloader.prototype._download = function(file_url, path, callback) {
+Downloader.prototype._download = function(file_url, path, callback, progressCallback) {
     var file = fs.createWriteStream(path);
     https.get(file_url, function(res) {
+        var contentLength = res.headers['content-length'];
+        var contentDownloaded = 0;
         res.on('data', function(data) {
             file.write(data);
+            contentDownloaded += data.length;
+            if (progressCallback) {
+                progressCallback(contentDownloaded/contentLength);
+            }
         }).on('end', function() {
             file.end();
             if (callback)
                 callback();
         });
     });
+
 };
 
 // NodeJS related

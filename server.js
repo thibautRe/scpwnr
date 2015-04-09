@@ -38,8 +38,23 @@ var addToQueue = function(req, url, conversionID) {
             var newTrack = new Track(trackInfos[1], trackInfos[2], trackInfos[3], trackInfos[4]);
             tracks.push(newTrack);
 
-            downloader.download(newTrack, function() {
-                console.log('download over');
+            // Begin the download
+            req.io.emit('down-begin', {
+                id: conversionID,
+                name: newTrack.getName()
+            });
+            downloader.download(newTrack, function(track) {
+                // Download is finished
+                req.io.emit('down-finish', {
+                    id: conversionID,
+                    name: track.getName()
+                });
+            }, function(track, progress) {
+                req.io.emit('down-progress', {
+                    id: conversionID,
+                    name: track.getName(),
+                    progress: progress
+                });
             });
         }
 
