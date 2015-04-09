@@ -22,9 +22,8 @@ var show = function(_object) {
     console.log(JSON.stringify(_object, undefined, 4));
 };
 
-var currentPwnr = {
-    songsDownloaded: []
-};
+// Will contain all the pwnd songs
+var currentPwnr = [];
 
 var openTrack = function(pageUrl) {
     casper.then(function() {
@@ -81,7 +80,7 @@ var openTrack = function(pageUrl) {
                 // Retrieve cover style attr
                 var coverStyle = this.getElementAttribute(coverSelector, 'style');
                 // Retrieve cover url
-                var coverUrl = /background(?:-\w*)?:\surl\((.*\.jpg)\)/g.exec(coverStyle)[1];
+                var coverUrl = /background(?:-\w*)?:\s?url\((?:"|')?(.*\.jpg)(?:"|')?\)/g.exec(coverStyle)[1];
 
                 // Retrieve MP3 Stream Addresses
                 this.thenOpen(streamMp3Address, {
@@ -97,26 +96,8 @@ var openTrack = function(pageUrl) {
                     this.log('*** Mp3 adress: ' + mp3Adress, 'info');
 
                     // Download the mp3
-                    this.then(function() {
-                        var newTrack = new Track(titleText, artistText, mp3Adress, coverUrl);
-
-                        var mp3PathToFile = '';
-                        var coverPathToFile = '';
-                        if (!albumText) {
-                            mp3PathToFile = musicFolder + '/' + newTrack.getMp3Name();
-                            coverPathToFile = musicFolder + '/' + newTrack.getCoverName();
-                        }
-                        else {
-                            mp3PathToFile = musicFolder + '/' + albumText + '/' + newTrack.getMp3Name();
-                            coverPathToFile = musicFolder + '/' + albumText + '/' + newTrack.getCoverName();
-                        }
-
-                        // Download the mp3
-                        this.download(mp3Adress, mp3PathToFile);
-                        // Download the cover
-                        this.download(coverUrl, coverPathToFile);
-                        currentPwnr.songsDownloaded.push(newTrack);
-                    })
+                    var newTrack = new Track(titleText, artistText, mp3Adress, coverUrl);
+                    currentPwnr.push(newTrack);
                 });
             }, function() {
                 this.capture(captureFolder + '/' +  pageUrl.replace(/[\/:]/g, '-') + '.png');
@@ -199,12 +180,14 @@ casper.start();
 
 // Open all the arguments in command line
 _open(scpwnrClient.getCleanedUrl(casper.cli.args[0]));
+
+// Print the results
 casper.then(function() {
+    // Server format
     if (casper.cli.options.format == 'server') {
-        for (var i in currentPwnr.songsDownloaded) {
-            var track = currentPwnr.songsDownloaded[i];
-            var trackInfos = track.getCleanInfos();
-            console.log(trackInfos.artist + '|' + trackInfos.title + '|' + track.url);
+        for (var i in currentPwnr) {
+            var track = currentPwnr[i];
+            console.log(track.scTitle + '|' + track.scArtist + '|' + track.url + '|' + track.coverUrl);
         }
     }
 });

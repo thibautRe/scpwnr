@@ -16,7 +16,7 @@
 </form>
 
 <!-- ko foreach: conversions -->
-  <div class="conversion" data-bind="style: $root.getStyleFromStatus(status)">
+  <div class="conversion" data-bind="css: {'conversion--finish': isFinished()}">
     <button class="conversion-delete" data-bind="click: function() {$root.deleteConversion($data)}">&times;</button>
     <!-- ko ifnot: isExpanded -->
       <button class="conversion-seemore" data-bind="click: expand">Voir plus </button>
@@ -44,9 +44,11 @@
 
         <!-- ko foreach: tracks -->
           <a class="conversion-track" data-bind="attr: {href: url}">
-            <span data-bind="text: artist"></span>
-            -
-            <span data-bind="text: title"></span>
+            <img data-bind="attr: {src: coverUrl}" class="conversion-cover">
+            <span class="track-name" data-bind="text: getName()"></span>
+            <span class="track-progress" data-bind="css: {'track-progress--finish': downloadStatus()=='downloaded'}">
+              <span class="track-progress-percent" data-bind="style: {width: downloadProgress() + '%'}"></span>
+            </span>
           </a>
         <!-- /ko -->
       <!-- /ko -->
@@ -66,6 +68,7 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>
 <script type="text/javascript" src="/scripts/scpwnr-client.js"></script>
 <script type="text/javascript" src="/scripts/conversion.js"></script>
+<script type="text/javascript" src="/scripts/track.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var io = io.connect();
@@ -91,12 +94,29 @@
   io.on('conv-finish', function(data) {
     var conversion = findConversionById(data.id);
     conversion.status('finish');
-    conversion.tracks(data.tracks);
+
+    // Make Track objects
+    var bufferTracks = [];
+    for (var i in data.tracks) {
+      var newTrack = new Track(data.tracks[i]);
+      bufferTracks.push(newTrack);
+    }
+    conversion.tracks(bufferTracks);
   });
   io.on('conv-error', function(data) {
     var conversion = findConversionById(data.id);
     conversion.status('error');
     conversion.errorMsg(data.consoleMsg.stdout);
+  });
+  io.on('down-progress', function(data) {
+    var conversion = findConversionById(data.id);
+    var track = conversion.findTrackByName(data.name);
+    track.downloadProgress(data.progress);
+  });
+  io.on('down-finish', function(data) {
+    var conversion = findConversionById(data.id);
+    var track = conversion.findTrackByName(data.name);
+    track.downloadStatus('downloaded');
   });
 
   var requestForm = $('.js-form--main');
@@ -125,14 +145,6 @@
   ko.applyBindings({
     conversions: conversions,
     trackUrl: trackUrl,
-    getStyleFromStatus: function(status) {
-      if (status() == 'finish') {
-        return {'background-color': 'rgba(20,240,20,.1)'}
-      }
-      else if (status() == 'error') {
-        return {'background-color': 'rgba(240,20,20,.1)'}
-      }
-    },
     deleteConversion: function(conversion) {
       conversions.remove(conversion);
     }

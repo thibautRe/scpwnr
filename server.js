@@ -1,11 +1,14 @@
 var express = require('express.io');
 var app = express();
 var exec = require('child_process').exec;
+var Downloader = require('./src/downloader');
+var Track = require('./public/scripts/track.js');
 
 app.http().io();
 app.use(express.static('public'));
 
 var conversionID = 0;
+var downloader = new Downloader("music");
 
 var addToQueue = function(req, url, conversionID) {
     exec('casperjs scpwnr.js --log-level=error --format=server ' + url, function(error, stdout, stderr) {
@@ -24,7 +27,7 @@ var addToQueue = function(req, url, conversionID) {
         var tracks = [];
 
         // Go through all good lines in console output, to retrieve artist|title|url
-        var pattern = '(.+)\\|(.+)\\|(.+)'
+        var pattern = '(.+)\\|(.+)\\|(.+)\\|(.+)'
         var regex = new RegExp(pattern, 'gm');
         var goodOutputLines = stdout.match(regex);
         // Remove global for enabling "match" to give capturing groups
@@ -32,10 +35,26 @@ var addToQueue = function(req, url, conversionID) {
         // Filling all tracks with good infos
         for (var i in goodOutputLines) {
             var trackInfos = goodOutputLines[i].match(regex);
-            tracks.push({
-                artist: trackInfos[1],
-                title: trackInfos[2],
-                url: trackInfos[3]
+            var newTrack = new Track(trackInfos[1], trackInfos[2], trackInfos[3], trackInfos[4]);
+            tracks.push(newTrack);
+
+            // Begin the download
+            req.io.emit('down-begin', {
+                id: conversionID,
+                name: newTrack.getName()
+            });
+            downloader.download(newTrack, function(track) {
+                // Download is finished
+                req.io.emit('down-finish', {
+                    id: conversionID,
+                    name: track.getName()
+                });
+            }, function(track, progress) {
+                req.io.emit('down-progress', {
+                    id: conversionID,
+                    name: track.getName(),
+                    progress: progress
+                });
             });
         }
 
