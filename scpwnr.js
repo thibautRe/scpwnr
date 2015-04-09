@@ -80,7 +80,7 @@ var openTrack = function(pageUrl) {
                 // Retrieve cover style attr
                 var coverStyle = this.getElementAttribute(coverSelector, 'style');
                 // Retrieve cover url
-                var coverUrl = /background(?:-\w*)?:\surl\((.*\.jpg)\)/g.exec(coverStyle)[1];
+                var coverUrl = /background(?:-\w*)?:\s?url\((?:"|')?(.*\.jpg)(?:"|')?\)/g.exec(coverStyle)[1];
 
                 // Retrieve MP3 Stream Addresses
                 this.thenOpen(streamMp3Address, {
