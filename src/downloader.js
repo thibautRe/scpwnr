@@ -10,8 +10,18 @@ var Downloader = function(baseDirectory) {
 };
 
 // Downloads track (MP3 + cover)
-Downloader.prototype.download = function(track, callback, progressCallback) {
+Downloader.prototype.download = function(track, conversionID, req) {
     var downloader = this;
+
+    // Test if the download is feasible
+    if (track.url == "undefined") {
+        req.io.emit('down-error', {
+            id: conversionID,
+            name: track.getName()
+        });
+        return;
+    }
+
     downloader._downloadMp3(track, function() {
         downloader._downloadCover(track, function() {
             var options = {
@@ -24,13 +34,19 @@ Downloader.prototype.download = function(track, callback, progressCallback) {
                 // Remove the cover-art file
                 fs.unlink(path.join(downloader.baseDirectory, track.getName() + '.jpg'));
 
-                if (callback) {
-                    callback(track);
-                }
+                // Download is finished
+                req.io.emit('down-finish', {
+                    id: conversionID,
+                    name: track.getName()
+                });
             });
         });
     }, function(progress) {
-        progressCallback(track, progress);
+        req.io.emit('down-progress', {
+            id: conversionID,
+            name: track.getName(),
+            progress: progress
+        });
     });
 };
 

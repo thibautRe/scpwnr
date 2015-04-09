@@ -32,36 +32,24 @@ var addToQueue = function(req, url, conversionID) {
         var goodOutputLines = stdout.match(regex);
         // Remove global for enabling "match" to give capturing groups
         regex = new RegExp(pattern);
+
         // Filling all tracks with good infos
         for (var i in goodOutputLines) {
             var trackInfos = goodOutputLines[i].match(regex);
             var newTrack = new Track(trackInfos[1], trackInfos[2], trackInfos[3], trackInfos[4]);
             tracks.push(newTrack);
-
-            // Begin the download
-            req.io.emit('down-begin', {
-                id: conversionID,
-                name: newTrack.getName()
-            });
-            downloader.download(newTrack, function(track) {
-                // Download is finished
-                req.io.emit('down-finish', {
-                    id: conversionID,
-                    name: track.getName()
-                });
-            }, function(track, progress) {
-                req.io.emit('down-progress', {
-                    id: conversionID,
-                    name: track.getName(),
-                    progress: progress
-                });
-            });
         }
 
         req.io.emit('conv-finish', {
             id: conversionID,
             tracks: tracks
         });
+
+        for (var i in tracks) {
+            // Download the track
+            downloader.download(tracks[i], conversionID, req);
+        }
+
     });
 };
 

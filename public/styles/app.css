@@ -183,6 +183,21 @@ h2 {
   box-shadow: 0 1px 3px rgba(0,0,0,.1);
 }
 
+.track-progress.track-progress--error {
+  background-color: #FF8686;
+}
+
+.track-progress-errormsg {
+  display: none;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+
+.track-progress.track-progress--error .track-progress-errormsg {
+  display: inline-block;
+}
+
 .track-progress-percent {
   display: inline-block;
   height: 100%;

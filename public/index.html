@@ -46,7 +46,9 @@
           <a class="conversion-track" data-bind="attr: {href: url}">
             <img data-bind="attr: {src: coverUrl}" class="conversion-cover">
             <span class="track-name" data-bind="text: getName()"></span>
-            <span class="track-progress" data-bind="css: {'track-progress--finish': downloadStatus()=='downloaded'}">
+            <span class="track-progress" data-bind="css: {'track-progress--finish': downloadStatus()=='downloaded', 'track-progress--error': downloadStatus()=='error'}">
+              <span class='track-progress-errormsg'>Error</span>
+
               <span class="track-progress-percent" data-bind="style: {width: downloadProgress() + '%'}"></span>
             </span>
           </a>
@@ -113,6 +115,12 @@
     var track = conversion.findTrackByName(data.name);
     track.downloadProgress(data.progress);
   });
+  io.on('down-error', function(data) {
+    var conversion = findConversionById(data.id);
+    console.log(data.id, data.name, conversion.tracks());
+    var track = conversion.findTrackByName(data.name);
+    track.downloadStatus('error');
+  })
   io.on('down-finish', function(data) {
     var conversion = findConversionById(data.id);
     var track = conversion.findTrackByName(data.name);
