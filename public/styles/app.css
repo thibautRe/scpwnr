@@ -17,17 +17,17 @@ body {
 }
 
 .scpwnr-head {
-  animation: enter 2s;
-  -webkit-animation: enter 2s;
+  animation: enter 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  -webkit-animation: enter 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 @keyframes enter {
-  0%, 50% {transform: translate(0px, 60px);}
+  0%, 60% {transform: translate(0px, 60px);}
   100% {transform: translate(0px, 0px);}
 }
 
 @-webkit-keyframes enter {
-  0%, 50% {-webkit-transform: translate(0px, 60px);}
+  0%, 60% {-webkit-transform: translate(0px, 60px);}
   100% {-webkit-transform: translate(0px, 0px);}
 }
 
