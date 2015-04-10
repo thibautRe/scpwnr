@@ -130,6 +130,7 @@ h2 {
   border-radius: 3px;
   box-shadow: 0px 0 5px rgba(0, 0, 0, 0.29);
   opacity: 0;
+  max-width: 300px;
   transition: opacity 1s;
   -webkit-transition: opacity 1s;
 }
