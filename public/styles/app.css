@@ -22,12 +22,12 @@ body {
 }
 
 @keyframes enter {
-  0%, 50% {transform: translate(0px, 40px);}
+  0%, 50% {transform: translate(0px, 60px);}
   100% {transform: translate(0px, 0px);}
 }
 
 @-webkit-keyframes enter {
-  0%, 50% {-webkit-transform: translate(0px, 40px);}
+  0%, 50% {-webkit-transform: translate(0px, 60px);}
   100% {-webkit-transform: translate(0px, 0px);}
 }
 
@@ -44,6 +44,9 @@ h2 {
   max-width: 400px;
   margin: auto;
   color: rgb(80,80,80);
+  opacity: 0;
+  animation: fade-in 2s 2s forwards;
+  -webkit-animation: fade-in 2s 2s forwards;
 }
 
 .form--main {
