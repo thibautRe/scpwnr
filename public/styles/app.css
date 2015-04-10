@@ -16,6 +16,21 @@ body {
   box-sizing: border-box;
 }
 
+.scpwnr-head {
+  animation: enter 2s;
+  -webkit-animation: enter 2s;
+}
+
+@keyframes enter {
+  0%, 50% {transform: translate(0px, 40px);}
+  100% {transform: translate(0px, 0px);}
+}
+
+@-webkit-keyframes enter {
+  0%, 50% {-webkit-transform: translate(0px, 40px);}
+  100% {-webkit-transform: translate(0px, 0px);}
+}
+
 h1 {
   margin-top: 0;
   font-weight: 300;
@@ -38,8 +53,21 @@ h2 {
   font-size: 0px;
   top: 0px;
   left: 0px;
+  opacity: 0;
   transition: background-color .3s;
   -webkit-transition: background-color .3s;
+  animation: fade-in 1s 1s forwards;
+  -webkit-animation: fade-in 1s 1s forwards;
+}
+
+@keyframes fade-in {
+  0% {opacity: 0}
+  100% {opacity: 1}
+}
+
+@-webkit-keyframes fade-in {
+  0% {opacity: 0}
+  100% {opacity: 1}
 }
 
 .form--main--sticky {
@@ -103,13 +131,18 @@ h2 {
   box-shadow: 0 2px 10px rgba(0,0,0,.1);
   color: rgb(86, 105, 108);
   text-align: left;
+  opacity: 0;
 
-  transition: .2s background-color;
-  -webkit-transition: .2s background-color;
+  transition: .2s background-color, 1s opacity;
+  -webkit-transition: .2s background-color, 1s opacity;
 }
 
 .conversion--finish {
   background-color: rgba(112, 225, 245, 0.24);
+}
+
+.conversion--ready {
+  opacity: 1;
 }
 
 .conversion-seemore {
