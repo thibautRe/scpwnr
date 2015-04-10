@@ -11,9 +11,10 @@
 <h2>Soundcloud's home-made, powerful, and fresh Pwnr.</h2>
 
 <form class="form--main js-form--main" action="/song">
-  <input class="form-square form-url" name="url" data-bind="value: trackUrl"/>
+  <input class="form-square form-url" name="url" data-bind="value: trackUrl" placeholder="Your Soundcloud URL"/>
   <button class="form-square form-submit" type="submit">Convertir</button>
 </form>
+<div class="form--main-stickyrepl js-form--main-stickyrepl"></div>
 
 <!-- ko foreach: conversions -->
   <div class="conversion" data-bind="css: {'conversion--finish': isFinished()}">
@@ -155,6 +156,20 @@
     trackUrl: trackUrl,
     deleteConversion: function(conversion) {
       conversions.remove(conversion);
+    }
+  });
+
+  var formMain = $('.js-form--main');
+
+  var formMainTop = formMain.offset().top;
+  $('.js-form--main-stickyrepl').height(formMain.height());
+  // Sticky form
+  $(window).scroll(function() {
+    if ($(window).scrollTop() > formMainTop) {
+      formMain.addClass('form--main--sticky');
+    }
+    else {
+      formMain.removeClass('form--main--sticky');
     }
   });
 

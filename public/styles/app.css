@@ -32,11 +32,30 @@ h2 {
 }
 
 .form--main {
-  padding-top: 50px;
+  padding: 20px 0px;
   display: inline-block;
   width: 100%;
   font-size: 0px;
-  padding-bottom: 20px;
+  top: 0px;
+  left: 0px;
+  transition: background-color .3s;
+  -webkit-transition: background-color .3s;
+}
+
+.form--main--sticky {
+  position: fixed;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #9E9E9E;
+}
+.form--main-stickyrepl {
+  display: none;
+  width: 100%;
+}
+
+.form--main--sticky + .form--main-stickyrepl {
+  display: block;
 }
 
 .form-square {
