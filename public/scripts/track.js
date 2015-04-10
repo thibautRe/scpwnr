@@ -1,17 +1,19 @@
 var ko;
 
-var Track = function(scTitle, scArtist, url, coverUrl) {
+var Track = function(scTitle, scArtist, url, coverUrl, albumText) {
     if (typeof scTitle == 'object') {
         this.scTitle = scTitle.scTitle;
         this.scArtist = scTitle.scArtist;
         this.url = scTitle.url;
         this.coverUrl = scTitle.coverUrl;
+        this.albumText = scTitle.albumText;
     }
     else {
         this.scTitle = scTitle;
         this.scArtist = scArtist;
         this.url = url;
         this.coverUrl = coverUrl;
+        this.albumText = albumText;
     }
 
     // knockout-related observables & computeds
@@ -71,6 +73,10 @@ Track.prototype.getFilefriendlyName = function() {
     var name = this.getName();
     var reg = /[^A-Za-z0-9 \-]/g;
     return name.replace(reg, "");
+};
+
+Track.prototype.getFilefriendlyAlbumtext = function() {
+    return this.albumText.replace(/[^\w -]/g, "");
 };
 
 // Clean a string, removing useless stuff

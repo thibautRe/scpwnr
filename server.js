@@ -27,7 +27,7 @@ var addToQueue = function(req, url, conversionID) {
         var tracks = [];
 
         // Go through all good lines in console output, to retrieve artist|title|url
-        var pattern = '(.+)\\|(.+)\\|(.+)\\|(.+)'
+        var pattern = '(.+)\\|(.+)\\|(.+)\\|(.+)\\|(.*)'
         var regex = new RegExp(pattern, 'gm');
         var goodOutputLines = stdout.match(regex);
         // Remove global for enabling "match" to give capturing groups
@@ -36,7 +36,7 @@ var addToQueue = function(req, url, conversionID) {
         // Filling all tracks with good infos
         for (var i in goodOutputLines) {
             var trackInfos = goodOutputLines[i].match(regex);
-            var newTrack = new Track(trackInfos[1], trackInfos[2], trackInfos[3], trackInfos[4]);
+            var newTrack = new Track(trackInfos[1], trackInfos[2], trackInfos[3], trackInfos[4], trackInfos[5]);
             tracks.push(newTrack);
         }
 

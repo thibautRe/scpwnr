@@ -33,10 +33,6 @@ var openTrack = function(pageUrl) {
         var artistText = '';
         var albumText = '';
 
-        if (/\/sets\/(.*)/.test(pageUrl)) {
-            albumText = /\/sets\/(.*)/.exec(pageUrl)[1];
-        }
-
         this.thenOpen(pageUrl);
         this.then(function() {
             // Attach event on resource request
@@ -70,6 +66,11 @@ var openTrack = function(pageUrl) {
                 // Retrieve the artist
                 artistText = this.getElementInfo(parentSelector + ' .soundTitle__username').text.trim();
 
+                // Get the album text if it exists
+                if (this.exists('.inPlaylist__title')) {
+                    albumText = this.getElementInfo('.inPlaylist__title').text.trim();
+                }
+
                 // Open the stream MP3 address
                 if (streamMp3Address == '') {
                     this.die('No stream found', 1);
@@ -96,7 +97,7 @@ var openTrack = function(pageUrl) {
                     this.log('*** Mp3 adress: ' + mp3Adress, 'info');
 
                     // Download the mp3
-                    var newTrack = new Track(titleText, artistText, mp3Adress, coverUrl);
+                    var newTrack = new Track(titleText, artistText, mp3Adress, coverUrl, albumText);
                     currentPwnr.push(newTrack);
                 });
             }, function() {
@@ -187,7 +188,7 @@ casper.then(function() {
     if (casper.cli.options.format == 'server') {
         for (var i in currentPwnr) {
             var track = currentPwnr[i];
-            console.log(track.scTitle + '|' + track.scArtist + '|' + track.url + '|' + track.coverUrl);
+            console.log(track.scTitle + '|' + track.scArtist + '|' + track.url + '|' + track.coverUrl + '|' + track.albumText);
         }
     }
 });

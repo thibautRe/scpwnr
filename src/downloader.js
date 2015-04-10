@@ -22,17 +22,29 @@ Downloader.prototype.download = function(track, conversionID, req) {
         return;
     }
 
+    // Make the album directory if needed
+    if (track.albumText) {
+        try {
+            fs.mkdirSync(path.join(downloader.baseDirectory, track.getFilefriendlyAlbumtext()));
+        }
+        catch (e) {
+            if (e.code != "EEXIST") {
+                console.log("Error making album dir : ", e);
+            }
+        }
+    }
+
     downloader._downloadMp3(track, function() {
         downloader._downloadCover(track, function() {
             var options = {
-                attachments: [path.join(downloader.baseDirectory, track.getFilefriendlyName() + '.jpg')]
+                attachments: [path.join(downloader.baseDirectory, track.getFilefriendlyAlbumtext(), track.getFilefriendlyName() + '.jpg')]
             };
 
-            ffmetadata.write(path.join(downloader.baseDirectory, track.getName() + '.mp3'), {}, options, function(err) {
+            ffmetadata.write(path.join(downloader.baseDirectory, track.getFilefriendlyAlbumtext(), track.getName() + '.mp3'), {}, options, function(err) {
                 if (err) console.log('Error writing cover art : ' + track.getName());
 
                 // Remove the cover-art file
-                fs.unlink(path.join(downloader.baseDirectory, track.getFilefriendlyName() + '.jpg'));
+                fs.unlink(path.join(downloader.baseDirectory, track.getFilefriendlyAlbumtext(), track.getFilefriendlyName() + '.jpg'));
 
                 // Download is finished
                 req.io.emit('down-finish', {
@@ -52,12 +64,12 @@ Downloader.prototype.download = function(track, conversionID, req) {
 
 // Downloads MP3
 Downloader.prototype._downloadMp3 = function(track, callback, progressCallback) {
-    this._download(track.url, path.join(this.baseDirectory, track.getName() + '.mp3'), callback, progressCallback);
+    this._download(track.url, path.join(this.baseDirectory, track.getFilefriendlyAlbumtext(), track.getName() + '.mp3'), callback, progressCallback);
 };
 
 // Downloads cover
 Downloader.prototype._downloadCover = function(track, callback) {
-    this._download(track.coverUrl, path.join(this.baseDirectory, track.getFilefriendlyName() + '.jpg'), callback);
+    this._download(track.coverUrl, path.join(this.baseDirectory, track.getFilefriendlyAlbumtext(), track.getFilefriendlyName() + '.jpg'), callback);
 };
 
 // Downloads a file using HTTPS.get
