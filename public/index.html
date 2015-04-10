@@ -16,7 +16,7 @@
 <form class="form--main js-form--main" action="/song">
   <input class="form-square form-url" name="url" data-bind="value: trackUrl" placeholder="Your Soundcloud URL" autofocus/>
   <button class="form-square form-submit" type="submit">Convertir</button>
-  <div class="form--main-errortooltip">
+  <div class="form--main-errortooltip" data-bind="css: {'form--main-errortooltip--show': showErrorTooltip()}">
     L'URL n'est pas valide
   </div>
 </form>
@@ -83,6 +83,7 @@
   var io = io.connect();
   var conversions = ko.observableArray([]);
   var trackUrl = ko.observable('');
+  var showErrorTooltip = ko.observable(false);
 
   var findConversionById = function(id) {
     var _conversions = conversions();
@@ -142,7 +143,11 @@
     trackUrl('');
 
     if (url === undefined) {
-      // message('URL unrecognized');
+      showErrorTooltip(true);
+      console.log('plop');
+      setTimeout(function() {
+        showErrorTooltip(false);
+      }, 4000);
       return false;
     }
 
@@ -162,7 +167,8 @@
     trackUrl: trackUrl,
     deleteConversion: function(conversion) {
       conversions.remove(conversion);
-    }
+    },
+    showErrorTooltip: showErrorTooltip
   });
 
   var formMain = $('.js-form--main');
