@@ -14,6 +14,7 @@
   <input class="form-square form-url" name="url" data-bind="value: trackUrl"/>
   <button class="form-square form-submit" type="submit">Convertir</button>
 </form>
+<div class="form--main-stickyrepl js-form--main-stickyrepl"></div>
 
 <!-- ko foreach: conversions -->
   <div class="conversion" data-bind="css: {'conversion--finish': isFinished()}">
@@ -155,6 +156,20 @@
     trackUrl: trackUrl,
     deleteConversion: function(conversion) {
       conversions.remove(conversion);
+    }
+  });
+
+  var formMain = $('.js-form--main');
+
+  var formMainTop = formMain.offset().top;
+  $('.js-form--main-stickyrepl').height(formMain.height());
+  // Sticky form
+  $(window).scroll(function() {
+    if ($(window).scrollTop() > formMainTop) {
+      formMain.addClass('form--main--sticky');
+    }
+    else {
+      formMain.removeClass('form--main--sticky');
     }
   });
 
