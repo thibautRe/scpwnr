@@ -47,6 +47,7 @@ h2 {
   z-index: 10;
   background-color: rgba(255, 255, 255, 0.7);
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #9E9E9E;
 }
 .form--main-stickyrepl {
   display: none;
