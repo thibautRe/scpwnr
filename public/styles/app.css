@@ -130,6 +130,7 @@ h2 {
   border-radius: 3px;
   box-shadow: 0px 0 5px rgba(0, 0, 0, 0.29);
   max-width: 300px;
+  z-index: 20;
 }
 
 .form--main-errortooltip::before {
