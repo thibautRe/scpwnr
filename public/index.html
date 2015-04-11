@@ -72,6 +72,11 @@
   </div>
 <!-- /ko -->
 
+<div class="sessiondownloads">
+  Total number of downloads :
+  <span data-bind="text: sessionDownloads()"></span>
+</div>
+
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>
@@ -84,6 +89,7 @@
   var conversions = ko.observableArray([]);
   var trackUrl = ko.observable('');
   var showErrorTooltip = ko.observable(false);
+  var sessionDownloads = ko.observable(0);
   var showErrorTooltipTimeout;
 
   var findConversionById = function(id) {
@@ -134,6 +140,9 @@
     var conversion = findConversionById(data.id);
     var track = conversion.findTrackByName(data.name);
     track.downloadStatus('downloaded');
+  });
+  io.on('downloadnumber-changed', function(data) {
+    sessionDownloads(data.sessionDownloads);
   });
 
   var requestForm = $('.js-form--main');
