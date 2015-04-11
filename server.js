@@ -6,6 +6,7 @@ var Track = require('./public/scripts/track.js');
 
 app.http().io();
 app.use(express.static('public'));
+app.engine('jade', require('jade').__express);
 
 var conversionID = 0;
 var downloader = new Downloader("music");
@@ -58,10 +59,9 @@ var addToQueue = function(req, url, conversionID) {
 };
 
 app.get('/', function (req, res) {
-    req.session.loginDate = new Date().toString();
-    req.session.name = req.session.loginDate;
-    res.sendfile(__dirname + '/public/index.html');
+    res.render('index.jade');
 });
+
 
 app.io.route('conv-request', function(req) {
     conversionID++;
