@@ -122,17 +122,14 @@ h2 {
 
 .form--main-errortooltip {
   position: absolute;
-  display: block;
+  display: none;
   left: 40%;
   padding: 5px 10px;
   background-color: rgba(233, 171, 171, 0.83);
   font-size: 13px;
   border-radius: 3px;
   box-shadow: 0px 0 5px rgba(0, 0, 0, 0.29);
-  opacity: 0;
   max-width: 300px;
-  transition: opacity 1s;
-  -webkit-transition: opacity 1s;
 }
 
 .form--main-errortooltip::before {
@@ -148,9 +145,17 @@ h2 {
 }
 
 .form--main-errortooltip.form--main-errortooltip--show {
-  opacity: 1;
-  transition: opacity .3s;
-  -webkit-transition: opacity .3s;
+  display: block;
+}
+
+.form--main-errortooltip a {
+  color: inherit;
+  font-weight: 100;
+  text-decoration: none;
+}
+
+.form--main-errortooltip a:hover {
+  text-decoration: underline;
 }
 
 /* Conversion */
@@ -170,8 +175,8 @@ h2 {
   text-align: left;
   opacity: 0;
 
-  transition: .2s background-color, 1s opacity;
-  -webkit-transition: .2s background-color, 1s opacity;
+  transition: .2s background-color;
+  -webkit-transition: .2s background-color;
 }
 
 .conversion--finish {
