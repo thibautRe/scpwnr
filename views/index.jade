@@ -1,6 +1,195 @@
 doctype html
-html(lang="en")
+html
   head
-    title PageTitle
+    title Soundcloud Pwnr*
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", type="text/css", href="/styles/app.css")
+    link(href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700', rel='stylesheet', type='text/css')
+  head
   body
-    p hey
+
+    header.scpwnr-head
+      h1 Sc Pwnr*
+      h2 Soundcloud's home-made, powerful, and fresh Pwnr.
+
+    form.form--main.js-form--main(action="/song")
+      input.form-square.form-url(name="url", data-bind="value: trackUrl" placeholder="Your Soundcloud URL", autofocus)
+      button.form-square.form-submit(type="submit") Convertir
+
+      .form--main-errortooltip(data-bind="css: {'form--main-errortooltip--show': showErrorTooltip()}")
+        | The URL is not valid. Try something like
+        a(href="//soundcloud.com/languages-2/03-tumalo", target="_blank") soundcloud.com/languages-2/03-tumalo
+      
+    
+    .form--main-stickyrepl.js-form--main-stickyrepl
+
+    // ko foreach: conversions
+    .conversion(data-bind="css: {'conversion--finish': isFinished(), 'conversion--ready': true}")
+      button.conversion-delete(data-bind="click: function() {$root.deleteConversion($data)}") &times;
+      
+      // ko ifnot: isExpanded
+      button.conversion-seemore(data-bind="click: expand") Voir plus
+      // /ko
+
+      // ko if: isExpanded
+      .conversion-info
+        h3.conversion-info-title ID
+        span.conversion-info-desc(data-bind="text: id")
+
+      .conversion-info
+        h3.conversion-info-title URL
+        a.conversion-info-desc(data-bind="text: url, attr: {href: url}", target="_blank")
+      
+      .conversion-info
+        h3.conversion-info-title Status
+        span.conversion-info-desc(data-bind="text: status")
+      // /ko
+
+      // ko if: status() == 'finish'
+      .conversion-info
+        h3.conversion-info-title Tracks
+        span.conversion-info-desc(data-bind="text: tracks().length")
+
+      // ko foreach: tracks 
+      a.conversion-track(data-bind="attr: {href: url}", target="_blank")
+        img.conversion-cover(data-bind="attr: {src: coverUrl}")
+        span.track-name(data-bind="text: getName()")
+        span.track-progress(data-bind="css: {'track-progress--finish': downloadStatus()=='downloaded', 'track-progress--error': downloadStatus()=='error'}")
+          span.track-progress-errormsg Error
+
+          span.track-progress-percent(data-bind="style: {width: downloadProgress() + '%'}")
+      // /ko
+      // /ko
+
+      // ko if: status() == 'error' && errorMsg
+      .conversion-info
+        h3.conversion-info-title Error msg
+        span.conversion-info-desc(data-bind="text: errorMsg")
+      // /ko
+      // /ko
+    // /ko
+
+    .sessiondownloads
+      | Total number of downloads :
+      span(data-bind="text: sessionDownloads()")
+
+
+    script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js")
+    script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js")
+    script(type="text/javascript", src="/scripts/scpwnr-client.js")
+    script(type="text/javascript", src="/scripts/conversion.js")
+    script(type="text/javascript", src="/scripts/track.js")
+    script(src="/socket.io/socket.io.js")
+    script.
+      var io = io.connect();
+      var conversions = ko.observableArray([]);
+      var trackUrl = ko.observable('');
+      var showErrorTooltip = ko.observable(false);
+      var sessionDownloads = ko.observable(0);
+      var showErrorTooltipTimeout;
+
+      var findConversionById = function(id) {
+        var _conversions = conversions();
+        for (var i in _conversions) {
+          if (_conversions[i].id == id) {
+            return _conversions[i];
+          }
+        }
+      };
+
+      // Listen for the talk event.
+      io.on('conv-begin', function(data) {
+        var newConversion = new Conversion(data.id);
+        conversions.unshift(newConversion);
+        newConversion.status('pending');
+        newConversion.url(data.url);
+      });
+      io.on('conv-finish', function(data) {
+        var conversion = findConversionById(data.id);
+        conversion.status('finish');
+
+        // Make Track objects
+        var bufferTracks = [];
+        for (var i in data.tracks) {
+          var newTrack = new Track(data.tracks[i]);
+          bufferTracks.push(newTrack);
+        }
+        conversion.tracks(bufferTracks);
+      });
+      io.on('conv-error', function(data) {
+        var conversion = findConversionById(data.id);
+        conversion.status('error');
+        conversion.errorMsg(data.consoleMsg.stdout);
+      });
+      io.on('down-progress', function(data) {
+        var conversion = findConversionById(data.id);
+        var track = conversion.findTrackByName(data.name);
+        track.downloadProgress(data.progress);
+      });
+      io.on('down-error', function(data) {
+        var conversion = findConversionById(data.id);
+        console.log(data.id, data.name, conversion.tracks());
+        var track = conversion.findTrackByName(data.name);
+        track.downloadStatus('error');
+      })
+      io.on('down-finish', function(data) {
+        var conversion = findConversionById(data.id);
+        var track = conversion.findTrackByName(data.name);
+        track.downloadStatus('downloaded');
+      });
+      io.on('downloadnumber-changed', function(data) {
+        sessionDownloads(data.sessionDownloads);
+      });
+
+      var requestForm = $('.js-form--main');
+
+      // on submit
+      requestForm.submit(function() {
+        var url = getCleanedUrl(trackUrl());
+        trackUrl('');
+
+        if (url === undefined) {
+          showErrorTooltip(true);
+          if (showErrorTooltipTimeout != undefined) {
+            clearTimeout(showErrorTooltipTimeout);
+          }
+          showErrorTooltipTimeout = setTimeout(function() {
+            showErrorTooltip(false);
+            showErrorTooltipTimeout = undefined;
+          }, 4000);
+          return false;
+        }
+
+        // Disable the form
+        $('js-form--main input').attr('disabled', 'true');
+
+        io.emit('conv-request', {
+          url: url,
+          type: getUrlType(url)
+        });
+
+        return false;
+      });
+
+      ko.applyBindings({
+        conversions: conversions,
+        trackUrl: trackUrl,
+        deleteConversion: function(conversion) {
+          conversions.remove(conversion);
+        },
+        showErrorTooltip: showErrorTooltip
+      });
+
+      var formMain = $('.js-form--main');
+
+      var formMainTop = formMain.offset().top;
+      $('.js-form--main-stickyrepl').height(formMain.height());
+      // Sticky form
+      $(window).scroll(function() {
+        if ($(window).scrollTop() > formMainTop) {
+          formMain.addClass('form--main--sticky');
+        }
+        else {
+          formMain.removeClass('form--main--sticky');
+        }
+      });
