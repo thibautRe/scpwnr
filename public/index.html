@@ -84,6 +84,7 @@
   var conversions = ko.observableArray([]);
   var trackUrl = ko.observable('');
   var showErrorTooltip = ko.observable(false);
+  var showErrorTooltipTimeout;
 
   var findConversionById = function(id) {
     var _conversions = conversions();
@@ -145,8 +146,12 @@
     if (url === undefined) {
       showErrorTooltip(true);
       console.log('plop');
-      setTimeout(function() {
+      if (showErrorTooltipTimeout != undefined) {
+        clearTimeout(showErrorTooltipTimeout);
+      }
+      showErrorTooltipTimeout = setTimeout(function() {
         showErrorTooltip(false);
+        showErrorTooltipTimeout = undefined;
       }, 4000);
       return false;
     }
