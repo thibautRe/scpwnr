@@ -11,7 +11,7 @@ var Downloader = function(baseDirectory) {
 };
 
 // Downloads track (MP3 + cover)
-Downloader.prototype.download = function(track, conversionID, req) {
+Downloader.prototype.download = function(track, conversionID, req, callback) {
     var downloader = this;
 
     // Test if the download is feasible
@@ -49,9 +49,7 @@ Downloader.prototype.download = function(track, conversionID, req) {
 
                 // Change the number of downloads
                 downloader.sessionDownloads++;
-                req.io.emit('downloadnumber-changed', {
-                    sessionDownloads: downloader.sessionDownloads
-                });
+                callback(downloader.sessionDownloads);
 
                 // Download is finished
                 req.io.emit('down-finish', {

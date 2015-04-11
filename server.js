@@ -47,7 +47,11 @@ var addToQueue = function(req, url, conversionID) {
 
         for (var i in tracks) {
             // Download the track
-            downloader.download(tracks[i], conversionID, req);
+            downloader.download(tracks[i], conversionID, req, function(sessionDownloads) {
+                app.io.broadcast('downloadnumber-changed', {
+                    sessionDownloads: sessionDownloads
+                });
+            });
         }
 
     });
