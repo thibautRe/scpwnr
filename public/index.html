@@ -17,7 +17,7 @@
   <input class="form-square form-url" name="url" data-bind="value: trackUrl" placeholder="Your Soundcloud URL" autofocus/>
   <button class="form-square form-submit" type="submit">Convertir</button>
   <div class="form--main-errortooltip" data-bind="css: {'form--main-errortooltip--show': showErrorTooltip()}">
-    The URL is not valid. Try something like <a href="//soundcloud.com/languages-2/03-tumalo">soundcloud.com/languages-2/03-tumalo</a>
+    The URL is not valid. Try something like <a href="//soundcloud.com/languages-2/03-tumalo" target="_blank">soundcloud.com/languages-2/03-tumalo</a>
   </div>
 </form>
 <div class="form--main-stickyrepl js-form--main-stickyrepl"></div>
@@ -36,7 +36,7 @@
       </div>
       <div class="conversion-info">
         <h3 class="conversion-info-title">URL</h3>
-        <a class="conversion-info-desc" data-bind="text: url, attr: {href: url}"></a>
+        <a class="conversion-info-desc" data-bind="text: url, attr: {href: url}" target="_blank"></a>
       </div>
       <div class="conversion-info">
         <h3 class="conversion-info-title">Status</h3>
@@ -50,7 +50,7 @@
         </div>
 
         <!-- ko foreach: tracks -->
-          <a class="conversion-track" data-bind="attr: {href: url}">
+          <a class="conversion-track" data-bind="attr: {href: url}" target="_blank">
             <img data-bind="attr: {src: coverUrl}" class="conversion-cover">
             <span class="track-name" data-bind="text: getName()"></span>
             <span class="track-progress" data-bind="css: {'track-progress--finish': downloadStatus()=='downloaded', 'track-progress--error': downloadStatus()=='error'}">
