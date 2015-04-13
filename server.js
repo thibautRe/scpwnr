@@ -1,8 +1,8 @@
 var express = require('express.io');
-var fs = require('fs');
 var app = express();
 var exec = require('child_process').exec;
 var Downloader = require('./src/downloader');
+var Stats = require('./src/stats');
 var Track = require('./public/scripts/track.js');
 
 app.http().io();
@@ -10,22 +10,8 @@ app.use(express.static('public'));
 app.engine('jade', require('jade').__express);
 
 var conversionID = 0;
-var downloader = new Downloader("music");
-
-var stats = {};
-// Create stats
-fs.readFile('./stats.json', {
-    encoding: 'utf-8'
-}, function(err, data) {
-    if (data=="") {
-        fs.writeFileSync('./stats.json', '{}');
-    }
-    else {
-        stats = JSON.parse(data);
-        downloader.sessionDownloads = stats.sessionDownloads;
-    }
-});
-
+var downloader = new Downloader('music');
+var stats = new Stats('./stats.json');
 
 
 var addToQueue = function(req, url, conversionID) {
@@ -65,15 +51,10 @@ var addToQueue = function(req, url, conversionID) {
 
         for (var i in tracks) {
             // Download the track
-            downloader.download(tracks[i], conversionID, req, function(sessionDownloads) {
-                stats.sessionDownloads = sessionDownloads;
-                fs.writeFile('./stats.json', JSON.stringify(stats), function(err) {
-                    if (err) {
-                        console.log('Error writing stats.json file', err);
-                    }
-                })
+            downloader.download(tracks[i], conversionID, req, function() {
+                stats.set('sessionDownloads', stats.get('sessionDownloads')+1);
                 app.io.broadcast('downloadnumber-changed', {
-                    sessionDownloads: sessionDownloads
+                    sessionDownloads: stats.get('sessionDownloads')
                 });
             });
         }

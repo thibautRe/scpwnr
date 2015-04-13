@@ -7,7 +7,6 @@ var ffmetadata = require('ffmetadata');
 var Downloader = function(baseDirectory) {
     if (baseDirectory === undefined) baseDirectory = "";
     this.baseDirectory = baseDirectory;
-    this.sessionDownloads = 0;
 };
 
 // Downloads track (MP3 + cover)
@@ -47,15 +46,14 @@ Downloader.prototype.download = function(track, conversionID, req, callback) {
                 // Remove the cover-art file
                 fs.unlink(path.join(downloader.baseDirectory, track.getFilefriendlyAlbumtext(), track.getFilefriendlyName() + '.jpg'));
 
-                // Change the number of downloads
-                downloader.sessionDownloads++;
-                callback(downloader.sessionDownloads);
-
                 // Download is finished
                 req.io.emit('down-finish', {
                     id: conversionID,
                     name: track.getName()
                 });
+
+                // Download complete callback
+                if (callback) callback();
             });
         });
     }, function(progress) {
