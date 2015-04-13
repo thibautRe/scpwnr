@@ -47,6 +47,12 @@ h2 {
   color: rgb(80,80,80);
 }
 
+h3 {
+  color: rgb(100,100,100);
+  font-weight: 300;
+  text-decoration: underline;
+}
+
 .scpwnr-head-infos {
   opacity: 0;
   animation: fade-in 2s 2s forwards;
@@ -66,7 +72,7 @@ h2 {
   height: 45px;
   color: #8D8D8D;
   padding: 10px;
-  border: 2px solid #C2C2C2;
+  border: 1px solid #C2C2C2;
   border-radius: 100px;
   text-decoration: none;
   transition: all .5s;
@@ -77,6 +83,16 @@ h2 {
   background-color: rgb(240,240,240);
   border-color: #686868;
   color: #686868;
+}
+
+.page {
+  animation: fade-out 1s forwards;
+  display: none;
+}
+
+.page.page--show {
+  animation: fade-in 1s forwards;
+  display: block;
 }
 
 .form--main {

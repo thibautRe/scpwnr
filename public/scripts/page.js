@@ -2,6 +2,7 @@ var io = io.connect();
 var conversions = ko.observableArray([]);
 var trackUrl = ko.observable('');
 var showErrorTooltip = ko.observable(false);
+var currentPage = ko.observable('scpwnr');
 var sessionDownloads = ko.observable(0);
 var showErrorTooltipTimeout;
 
@@ -94,7 +95,12 @@ ko.applyBindings({
     deleteConversion: function(conversion) {
         conversions.remove(conversion);
     },
-    showErrorTooltip: showErrorTooltip
+    showErrorTooltip: showErrorTooltip,
+    currentPage: currentPage,
+    changePage: function() {
+        if (currentPage() == 'scpwnr') currentPage('infos');
+        else currentPage('scpwnr');
+    }
 });
 
 var formMain = $('.js-form--main');
