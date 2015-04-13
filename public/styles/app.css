@@ -353,3 +353,7 @@ h3 {
 .track-progress--error .track-progress-percent {
   display: none;
 }
+.license {
+  font-size: .8em;
+  text-align: left;
+}
