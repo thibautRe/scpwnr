@@ -6,3 +6,4 @@ node_modules/
 public/vendor/
 launcher.bat
 *.log
+stats.json

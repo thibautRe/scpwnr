@@ -1,4 +1,5 @@
 var express = require('express.io');
+var fs = require('fs');
 var app = express();
 var exec = require('child_process').exec;
 var Downloader = require('./src/downloader');
@@ -10,6 +11,22 @@ app.engine('jade', require('jade').__express);
 
 var conversionID = 0;
 var downloader = new Downloader("music");
+
+var stats = {};
+// Create stats
+fs.readFile('./stats.json', {
+    encoding: 'utf-8'
+}, function(err, data) {
+    if (data=="") {
+        fs.writeFileSync('./stats.json', '{}');
+    }
+    else {
+        stats = JSON.parse(data);
+        downloader.sessionDownloads = stats.sessionDownloads;
+    }
+});
+
+
 
 var addToQueue = function(req, url, conversionID) {
     exec('casperjs scpwnr.js --log-level=error --format=server ' + url, function(error, stdout, stderr) {
@@ -49,6 +66,12 @@ var addToQueue = function(req, url, conversionID) {
         for (var i in tracks) {
             // Download the track
             downloader.download(tracks[i], conversionID, req, function(sessionDownloads) {
+                stats.sessionDownloads = sessionDownloads;
+                fs.writeFile('./stats.json', JSON.stringify(stats), function(err) {
+                    if (err) {
+                        console.log('Error writing stats.json file', err);
+                    }
+                })
                 app.io.broadcast('downloadnumber-changed', {
                     sessionDownloads: sessionDownloads
                 });
