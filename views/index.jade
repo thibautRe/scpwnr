@@ -3,7 +3,9 @@ extends ./layout.jade
 block body
   header.scpwnr-head
     h1 Sc Pwnr*
-    h2 Soundcloud's home-made, powerful, and fresh Pwnr.
+    .scpwnr-head-infos
+      h2.scpwnr-head-infos-title Soundcloud's home-made, powerful, and fresh Pwnr.
+      a.scpwnr-head-infos-link(href="/stats") ?
 
   form.form--main.js-form--main(action="/song")
     input.form-square.form-url(name="url", data-bind="value: trackUrl" placeholder="Your Soundcloud URL", autofocus)

@@ -45,9 +45,38 @@ h2 {
   margin: auto;
   padding: 0px 20px;
   color: rgb(80,80,80);
+}
+
+.scpwnr-head-infos {
   opacity: 0;
   animation: fade-in 2s 2s forwards;
   -webkit-animation: fade-in 2s 2s forwards;
+}
+
+.scpwnr-head-infos-title {
+  display: inline-block;
+  vertical-align: middle;
+  width: 85%;
+}
+
+.scpwnr-head-infos-link {
+  display: inline-block;
+  vertical-align: middle;
+  width: 45px;
+  height: 45px;
+  color: #8D8D8D;
+  padding: 10px;
+  border: 2px solid #C2C2C2;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all .5s;
+  -webkit-transition: all .5s;
+}
+
+.scpwnr-head-infos-link:hover {
+  background-color: rgb(240,240,240);
+  border-color: #686868;
+  color: #686868;
 }
 
 .form--main {
@@ -101,7 +130,7 @@ h2 {
 }
 
 .form-url {
-  background-color: rgba(240,240,240,1);
+  background-color: rgb(240,240,240);
   border-right: none;
   width: 550px;
   max-width: 60%;
