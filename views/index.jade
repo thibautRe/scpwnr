@@ -5,7 +5,7 @@ block body
     h1 Sc Pwnr*
     .scpwnr-head-infos
       h2.scpwnr-head-infos-title Soundcloud's home-made, powerful, and fresh Pwnr.
-      a.scpwnr-head-infos-link(href="/stats", data-bind="click: changePage")
+      .scpwnr-head-infos-link(data-bind="click: changePage")
         span(data-bind="html: currentPage() == 'scpwnr' ? '?':'&times;'")
 
   .page.js-page(data-bind="css: {'page--show': currentPage() == 'scpwnr'}")
