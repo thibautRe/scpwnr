@@ -44,5 +44,5 @@ Stats.prototype._saveSync = function() {
 // Export
 var module
 if (module && module.exports) {
-    module.exports = Stats;
+    module.exports = new Stats('./stats.json');
 }

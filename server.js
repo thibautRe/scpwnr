@@ -3,6 +3,7 @@ var app = express();
 var exec = require('child_process').exec;
 var Downloader = require('./src/downloader');
 var Stats = require('./src/stats');
+var Api = require('./src/api');
 var Track = require('./public/scripts/track.js');
 
 app.http().io();
@@ -11,7 +12,7 @@ app.engine('jade', require('jade').__express);
 
 var conversionID = 0;
 var downloader = new Downloader('music');
-var stats = new Stats('./stats.json');
+var api = new Api(app);
 
 
 var addToQueue = function(req, url, conversionID) {
@@ -52,9 +53,9 @@ var addToQueue = function(req, url, conversionID) {
         for (var i in tracks) {
             // Download the track
             downloader.download(tracks[i], conversionID, req, function() {
-                stats.set('sessionDownloads', stats.get('sessionDownloads')+1);
+                Stats.set('sessionDownloads', Stats.get('sessionDownloads')+1);
                 app.io.broadcast('downloadnumber-changed', {
-                    sessionDownloads: stats.get('sessionDownloads')
+                    sessionDownloads: Stats.get('sessionDownloads')
                 });
             });
         }
@@ -64,10 +65,6 @@ var addToQueue = function(req, url, conversionID) {
 
 app.get('/', function (req, res) {
     res.render('index.jade');
-});
-
-app.get('/api/stats', function (req, res) {
-    res.json(stats.getAll());
 });
 
 app.io.route('conv-request', function(req) {
