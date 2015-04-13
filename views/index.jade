@@ -7,64 +7,7 @@ block body
       h2.scpwnr-head-infos-title Soundcloud's home-made, powerful, and fresh Pwnr.
       a.scpwnr-head-infos-link(href="/stats") ?
 
-  form.form--main.js-form--main(action="/song")
-    input.form-square.form-url(name="url", data-bind="value: trackUrl" placeholder="Your Soundcloud URL", autofocus)
-    button.form-square.form-submit(type="submit") Convertir
-
-    .form--main-errortooltip(data-bind="css: {'form--main-errortooltip--show': showErrorTooltip()}")
-      | The URL is not valid. Try something like 
-      a(href="//soundcloud.com/languages-2/03-tumalo", target="_blank") soundcloud.com/languages-2/03-tumalo
-  
-  .form--main-stickyrepl.js-form--main-stickyrepl
-
-  // ko foreach: conversions
-  .conversion(data-bind="css: {'conversion--finish': isFinished(), 'conversion--ready': true}")
-    button.conversion-delete(data-bind="click: function() {$root.deleteConversion($data)}") &times;
-    
-    // ko ifnot: isExpanded
-    button.conversion-seemore(data-bind="click: expand") Voir plus
-    // /ko
-
-    // ko if: isExpanded
-    .conversion-info
-      h3.conversion-info-title ID
-      span.conversion-info-desc(data-bind="text: id")
-
-    .conversion-info
-      h3.conversion-info-title URL
-      a.conversion-info-desc(data-bind="text: url, attr: {href: url}", target="_blank")
-    
-    .conversion-info
-      h3.conversion-info-title Status
-      span.conversion-info-desc(data-bind="text: status")
-    // /ko
-
-    // ko if: status() == 'finish'
-    .conversion-info
-      h3.conversion-info-title Tracks
-      span.conversion-info-desc(data-bind="text: tracks().length")
-
-    // ko foreach: tracks 
-    a.conversion-track(data-bind="attr: {href: url}", target="_blank")
-      img.conversion-cover(data-bind="attr: {src: coverUrl}")
-      span.track-name(data-bind="text: getName()")
-      span.track-progress(data-bind="css: {'track-progress--finish': downloadStatus()=='downloaded', 'track-progress--error': downloadStatus()=='error'}")
-        span.track-progress-errormsg Error
-
-        span.track-progress-percent(data-bind="style: {width: downloadProgress() + '%'}")
-    // /ko
-    // /ko
-
-    // ko if: status() == 'error' && errorMsg
-    .conversion-info
-      h3.conversion-info-title Error msg
-      span.conversion-info-desc(data-bind="text: errorMsg")
-    // /ko
-    // /ko
-  // /ko
-
-  .sessiondownloads Total number of downloads : 
-    span(data-bind="text: sessionDownloads()")
+  include partials/scpwnr
 
 block scripts
   script(type="text/javascript", src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js")
