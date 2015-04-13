@@ -11,7 +11,7 @@ block body
   .page.js-page(data-bind="css: {'page--show': currentPage() == 'scpwnr'}")
     include partials/scpwnr
 
-  .page.js-page(data-bind="css: {'page--show': currentPage() == 'infos'}")
+  .page.page--infos.js-page(data-bind="css: {'page--show': currentPage() == 'infos'}")
     include partials/infos
 
 block scripts
