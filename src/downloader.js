@@ -99,6 +99,6 @@ Downloader.prototype._download = function(file_url, path, callback, progressCall
 // NodeJS related
 var module;
 if (module && module.exports) {
-    module.exports = Downloader;
+    module.exports = new Downloader('music');
 }
 

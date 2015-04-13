@@ -16,13 +16,13 @@ var findConversionById = function(id) {
 };
 
 // Listen for the talk event.
-io.on('conv-begin', function(data) {
+io.on('conversion-begin', function(data) {
     var newConversion = new Conversion(data.id);
     conversions.unshift(newConversion);
     newConversion.status('pending');
     newConversion.url(data.url);
 });
-io.on('conv-finish', function(data) {
+io.on('conversion-finish', function(data) {
     var conversion = findConversionById(data.id);
     conversion.status('finish');
 
@@ -34,7 +34,7 @@ io.on('conv-finish', function(data) {
     }
     conversion.tracks(bufferTracks);
 });
-io.on('conv-error', function(data) {
+io.on('conversion-error', function(data) {
     var conversion = findConversionById(data.id);
     conversion.status('error');
     conversion.errorMsg(data.consoleMsg.stdout);
@@ -81,7 +81,7 @@ requestForm.submit(function() {
     // Disable the form
     $('js-form--main input').attr('disabled', 'true');
 
-    io.emit('conv-request', {
+    io.emit('/api/conversion-request', {
         url: url,
         type: getUrlType(url)
     });

@@ -3,7 +3,8 @@ var fs = require('fs');
 var Stats = function(filename) {
     this.filename = filename;
     this.data = {
-        'sessionDownloads': 0
+        'sessionDownloads': 0,
+        'sessionConversions': 0
     };
     this._loadSync();
 };
@@ -23,6 +24,11 @@ Stats.prototype.set = function(key, value) {
     this._saveSync();
 };
 
+// synchronous increment
+Stats.prototype.increment = function(key) {
+    this.set(key, this.get(key) + 1);
+};
+
 // Synchronous load
 Stats.prototype._loadSync = function() {
     var data = fs.readFileSync(this.filename, {
@@ -34,6 +40,8 @@ Stats.prototype._loadSync = function() {
         this.data = JSON.parse(data);
     }
 };
+
+
 
 // synchronous save
 Stats.prototype._saveSync = function() {
