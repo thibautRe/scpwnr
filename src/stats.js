@@ -13,6 +13,10 @@ Stats.prototype.get = function(key) {
     return this.data[key];
 };
 
+Stats.prototype.getAll = function() {
+    return this.data;
+};
+
 // synchronous set + save
 Stats.prototype.set = function(key, value) {
     this.data[key] = value;

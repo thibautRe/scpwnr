@@ -66,6 +66,9 @@ app.get('/', function (req, res) {
     res.render('index.jade');
 });
 
+app.get('/api/stats', function (req, res) {
+    res.json(stats.getAll());
+});
 
 app.io.route('conv-request', function(req) {
     conversionID++;

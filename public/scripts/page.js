@@ -116,3 +116,9 @@ $(window).scroll(function() {
         formMain.removeClass('form--main--sticky');
     }
 });
+
+
+// Get the stats
+$.getJSON('/api/stats', function(data) {
+    sessionDownloads(data.sessionDownloads);
+});
