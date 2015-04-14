@@ -9,9 +9,17 @@ var Api = function(app) {
 Api.prototype._setRoutes = function() {
     var api = this;
 
+    // /
+    this.app.get('/', function (req, res) {
+        res.render('index.jade');
+    });
+    
+    // /api/stats
     this.app.get('/api/stats', function (req, res) {
         res.json(stats.getAll());
     });
+
+    // /api/conversion-request
     this.app.io.route('/api/conversion-request', function(req, res) {
         stats.increment('sessionConversions');
         var session = stats.get('sessionConversions');
