@@ -89,6 +89,8 @@ h3 {
 .page {
   animation: fade-out 1s forwards;
   display: none;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .page.page--show {
@@ -149,8 +151,8 @@ h3 {
 .form-url {
   background-color: rgb(240,240,240);
   border-right: none;
-  width: 550px;
-  max-width: 60%;
+  width: 500px;
+  max-width: 70%;
   font-weight: 200;
   border-bottom-right-radius: 0px;
   border-top-right-radius: 0px;
@@ -212,7 +214,6 @@ h3 {
   padding: 10px;
   padding-right: 50px;
   width: 80%;
-  max-width: 550px;
   margin: auto;
   margin-bottom: 10px;
   border: 1px solid rgba(0,0,0,.1);
@@ -361,5 +362,7 @@ h3 {
 
 .page--infos-text {
   font-size: .8em;
-  text-align: left;  
+  text-align: left;
+  color: #696974;
+  font-weight: 200;
 }
