@@ -45,7 +45,7 @@ var openTrack = function(pageUrl) {
             });
 
             // Click on the play button
-            var selectors = ['.soundTitle.single', '.soundTitle.soundTitle_hero'];
+            var selectors = ['.soundTitle.single', '.soundTitle.soundTitle_hero', '.fullListenHero .soundTitle'];
             this.waitForSelector(selectors.join(','), function() {
 
                 // Retrieve true parent selector
