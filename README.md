@@ -2,7 +2,7 @@
 
 Soundcloud Downloader. Helper to download songs from [Soundcloud](http://soundcloud.com)
 
-[Screencap](https://raw.github.com/thibautRe/scpwnr/master/screencapture.png)
+![Screencap](https://raw.github.com/thibautRe/scpwnr/master/screencapture.png)
 
 ## Disclaimer
 
