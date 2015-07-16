@@ -40,7 +40,7 @@ Downloader.prototype.download = function(track, conversionID, req, callback) {
                 attachments: [path.join(downloader.baseDirectory, track.getFilefriendlyAlbumtext(), track.getFilefriendlyName() + '.jpg')]
             };
 
-            ffmetadata.write(path.join(downloader.baseDirectory, track.getFilefriendlyAlbumtext(), track.getName() + '.mp3'), {}, options, function(err) {
+            ffmetadata.write(path.join(downloader.baseDirectory, track.getFilefriendlyAlbumtext(), track.getFilefriendlyName() + '.mp3'), {}, options, function(err) {
                 if (err) console.log('Error writing cover art : ' + track.getName());
 
                 // Remove the cover-art file
@@ -67,7 +67,7 @@ Downloader.prototype.download = function(track, conversionID, req, callback) {
 
 // Downloads MP3
 Downloader.prototype._downloadMp3 = function(track, callback, progressCallback) {
-    this._download(track.url, path.join(this.baseDirectory, track.getFilefriendlyAlbumtext(), track.getName() + '.mp3'), callback, progressCallback);
+    this._download(track.url, path.join(this.baseDirectory, track.getFilefriendlyAlbumtext(), track.getFilefriendlyName() + '.mp3'), callback, progressCallback);
 };
 
 // Downloads cover
