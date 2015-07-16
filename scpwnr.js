@@ -113,7 +113,7 @@ var openSet = function(setUrl) {
     casper.then(function() {
         var setLinks = this.evaluate(function() {
             var setLinks = [];
-            var listNodes = document.querySelectorAll('.listenDetails__trackList .trackItem__trackTitle');
+            var listNodes = document.querySelectorAll('.listenDetails__trackList .trackItem__trackTitle, .listenDetails__trackList .trackItemWithEdit__trackTitle');
             for (var i = 0; i < listNodes.length; i++) {
                 setLinks.push(listNodes[i].href);
             }
